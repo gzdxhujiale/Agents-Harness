@@ -5,7 +5,15 @@ import type { FileResult, HarnessState, InitializeResult } from "../types.js";
 import { exists } from "./paths.js";
 
 const templateRoot = resolve(fileURLToPath(new URL("../../templates/default", import.meta.url)));
-const directoryTemplates = [".agents/skills/bootstrap-docs/SKILL.md", ".agents/skills/write-architecture/SKILL.md", ".agents/skills/write-security/SKILL.md", ".agents/skills/write-reliability/SKILL.md", ".agents/skills/write-frontend/SKILL.md"];
+const directoryTemplates = [
+  ".agents/skills/bootstrap-docs/SKILL.md",
+  ".agents/skills/write-agents/SKILL.md",
+  ".agents/skills/write-architecture/SKILL.md",
+  ".agents/skills/write-design/SKILL.md",
+  ".agents/skills/write-security/SKILL.md",
+  ".agents/skills/write-reliability/SKILL.md",
+  ".agents/skills/write-frontend/SKILL.md",
+];
 const markdownTemplates = ["AGENTS.md", "ARCHITECTURE.md", "docs/DESIGN.md", "docs/FRONTEND.md", "docs/PRODUCT_SENSE.md", "docs/QUALITY_SCORE.md", "docs/RELIABILITY.md", "docs/SECURITY.md"];
 const emptyDirectories = [".xxx/schemas", "docs/product-specs", "docs/references", "docs/generated"];
 
