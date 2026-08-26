@@ -6,14 +6,17 @@ import { parseMarkdown } from "./markdown/parser.js";
 import { loadBundledSchemas } from "./schema/loader.js";
 import { resolveSchema } from "./schema/resolver.js";
 import { validateModel } from "./schema/validator.js";
+import { detectCapabilities } from "./applicability/detect.js";
+import { resolveApplicability } from "./applicability/resolve.js";
 
 export async function validateDocument(path: string, from = process.cwd()): Promise<ValidationResult> {
   const root = await findProjectRoot(isAbsolute(path) ? path : from); const absolute = resolve(root, path); const schemas = await loadBundledSchemas(); const schema = resolveSchema(schemas, absolute, root);
   if (!schema) { const item = { path, severity: "error" as const, code: "UNKNOWN_DOCUMENT", message: "This is not a managed document." }; return { path, valid: false, issues: [item], errors: [item], warnings: [] }; }
-  if (!(await exists(absolute))) { const item = { path: schema.path, severity: schema.applicability === "required" ? "error" as const : "warning" as const, code: "DOCUMENT_MISSING", message: "Managed document does not exist." }; return { path: schema.path, document: schema.path, schema: schema.id, applicability: schema.applicability ?? "required", valid: item.severity !== "error", issues: [item], errors: item.severity === "error" ? [item] : [], warnings: item.severity === "warning" ? [item] : [] }; }
+  const applicability = resolveApplicability(schema, await detectCapabilities(root));
+  if (!(await exists(absolute))) { const item = { path: schema.path, severity: applicability.state === "required" ? "error" as const : "warning" as const, code: "DOCUMENT_MISSING", message: "Managed document does not exist." }; return { path: schema.path, document: schema.path, schema: schema.id, applicability: applicability.state, valid: item.severity !== "error", issues: [item], errors: item.severity === "error" ? [item] : [], warnings: item.severity === "warning" ? [item] : [] }; }
   const issues = await validateModel(parseMarkdown(await readFile(absolute, "utf8")), schema, root); const errors = issues.filter((item) => item.severity === "error");
-  return { path: schema.path, document: schema.path, schema: schema.id, applicability: schema.applicability ?? "required", valid: errors.length === 0, issues, errors, warnings: issues.filter((item) => item.severity === "warning") };
+  return { path: schema.path, document: schema.path, schema: schema.id, applicability: applicability.state, valid: errors.length === 0, issues, errors, warnings: issues.filter((item) => item.severity === "warning") };
 }
 // Applicability detection is intentionally outside the schema engine. Until a context layer
 // marks conditional/recommended documents applicable, only required documents are enforced.
-export async function validateAllDocuments(from = process.cwd()): Promise<ValidationResult[]> { const root = await findProjectRoot(from); const schemas = await loadBundledSchemas(); return Promise.all(schemas.filter((schema) => schema.applicability === "required").map((schema) => validateDocument(join(root, schema.path), root))); }
+export async function validateAllDocuments(from = process.cwd()): Promise<ValidationResult[]> { const root = await findProjectRoot(from); const schemas = await loadBundledSchemas(); const report = await detectCapabilities(root); return Promise.all(schemas.filter((schema) => { const state = resolveApplicability(schema, report).state; return state === "required" || state === "recommended"; }).map((schema) => validateDocument(join(root, schema.path), root))); }

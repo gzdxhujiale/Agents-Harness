@@ -1,6 +1,6 @@
 id: security
 path: docs/SECURITY.md
-applicability: recommended
+applicability: { when_any: [server_api, authentication, external_input, secrets_configuration, sensitive_data], present: recommended, absent: not_applicable }
 sections:
   - { id: overview, title: Security Overview, level: 2, required: false, non_empty: true }
   - { id: boundaries, title: Trust Boundaries, level: 2, required: false, non_empty: true }

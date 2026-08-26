@@ -2,7 +2,7 @@
 
 ## Design Principles
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define the core UI/UX principles that should guide product and interface design decisions.
 
@@ -29,7 +29,7 @@ Constraints:
 
 ## Visual Language
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe the overall visual character of the product.
 
@@ -63,7 +63,7 @@ Constraints:
 
 ## Layout and Spacing
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how pages and components should organize space and visual hierarchy.
 
@@ -92,7 +92,7 @@ Constraints:
 
 ## Typography
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how typography communicates hierarchy and meaning.
 
@@ -119,7 +119,7 @@ Constraints:
 
 ## Color
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how color should be used semantically and consistently.
 
@@ -151,7 +151,7 @@ Constraints:
 
 ## Components
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how reusable UI components should be selected, composed, and extended.
 
@@ -180,7 +180,7 @@ Constraints:
 
 ## Interaction Patterns
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define reusable interaction behavior across the product.
 
@@ -212,7 +212,7 @@ Constraints:
 
 ## Navigation
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how users move through the product and understand their current location.
 
@@ -238,7 +238,7 @@ Constraints:
 
 ## Forms and Input
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define consistent form and input behavior.
 
@@ -272,7 +272,7 @@ Constraints:
 
 ## Feedback and Status
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how the interface communicates the result and state of user actions.
 
@@ -297,7 +297,7 @@ Constraints:
 
 ## Loading States
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how the interface behaves while data or actions are in progress.
 
@@ -323,7 +323,7 @@ Constraints:
 
 ## Empty States
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how the product communicates the absence of content or data.
 
@@ -347,7 +347,7 @@ Constraints:
 
 ## Error States
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how user-facing errors should be presented.
 
@@ -373,7 +373,7 @@ Constraints:
 
 ## Responsive Design
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how layouts and interactions adapt across supported viewport sizes and devices.
 
@@ -398,7 +398,7 @@ Constraints:
 
 ## Accessibility
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define UI/UX requirements that make the product usable by people with different abilities and input methods.
 
@@ -427,7 +427,7 @@ Constraints:
 
 ## Motion and Animation
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define when motion should be used and what purpose it should serve.
 
@@ -448,7 +448,7 @@ Constraints:
 
 ## Content and Microcopy
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how interface text should communicate actions, state, and guidance.
 
@@ -475,7 +475,7 @@ Constraints:
 
 ## Design Consistency
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how new work should preserve consistency with existing product patterns.
 
@@ -500,7 +500,7 @@ Constraints:
 
 ## Design Review Criteria
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define the checks required before significant UI/UX work may be considered complete.
 

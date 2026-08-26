@@ -2,7 +2,7 @@
 
 ## Frontend Overview
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Provide a concise overview of how frontend code is implemented in this repository.
 
@@ -36,7 +36,7 @@ Constraints:
 
 ## Source Structure
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe how frontend source code is organized and where different responsibilities belong.
 
@@ -73,7 +73,7 @@ Constraints:
 
 ## Component Design
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how React or equivalent UI components should be structured and composed.
 
@@ -101,7 +101,7 @@ Constraints:
 
 ## Design System Usage
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how the configured UI component system should be used in implementation.
 
@@ -127,7 +127,7 @@ Constraints:
 
 ## Styling
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how styling should be implemented consistently.
 
@@ -159,7 +159,7 @@ Constraints:
 
 ## State Management
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define where frontend state belongs and how ownership should be determined.
 
@@ -187,7 +187,7 @@ Constraints:
 
 ## Data Fetching
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how frontend code communicates with APIs and manages remote data.
 
@@ -216,7 +216,7 @@ Constraints:
 
 ## Routing and Navigation
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how route-level frontend behavior should be implemented.
 
@@ -244,7 +244,7 @@ Constraints:
 
 ## Forms and Validation
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how forms, input state, and validation should be implemented.
 
@@ -274,7 +274,7 @@ Constraints:
 
 ## Loading, Empty, and Error States
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define the frontend implementation expectations for non-happy-path states.
 
@@ -302,7 +302,7 @@ Constraints:
 
 ## Effects and Side Effects
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how frontend side effects should be handled.
 
@@ -329,7 +329,7 @@ Constraints:
 
 ## Hooks and Reusable Logic
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define how reusable frontend behavior should be extracted.
 
@@ -354,7 +354,7 @@ Constraints:
 
 ## TypeScript
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define frontend TypeScript expectations.
 
@@ -382,7 +382,7 @@ Constraints:
 
 ## Performance
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define frontend performance practices that should influence implementation.
 
@@ -411,7 +411,7 @@ Constraints:
 
 ## Accessibility Implementation
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define technical frontend requirements for implementing accessible UI.
 
@@ -440,7 +440,7 @@ Constraints:
 
 ## Testing
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define frontend testing expectations and where different types of tests provide value.
 
@@ -467,7 +467,7 @@ Constraints:
 
 ## Frontend Invariants
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Capture durable frontend implementation rules that should remain true as the codebase evolves.
 
@@ -494,7 +494,7 @@ Constraints:
 
 ## Frontend Review Criteria
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define the implementation checks required before significant frontend work may be considered complete.
 

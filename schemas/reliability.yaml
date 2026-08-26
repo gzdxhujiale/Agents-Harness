@@ -1,6 +1,6 @@
 id: reliability
 path: docs/RELIABILITY.md
-applicability: recommended
+applicability: { when_any: [production_runtime, server_api, background_jobs, queue, external_dependency], present: recommended, absent: not_applicable }
 sections:
   - { id: runtime, title: Runtime Overview, level: 2, required: false, non_empty: true }
   - { id: dependencies, title: Critical Dependencies, level: 2, required: false, non_empty: true }

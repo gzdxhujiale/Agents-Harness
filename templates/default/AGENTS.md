@@ -2,7 +2,7 @@
 
 ## Project
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Summarize the repository using verified project facts.
 
@@ -25,7 +25,7 @@ Constraints:
 
 ## Repository Map
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Provide a concise navigation map for coding agents.
 
@@ -59,7 +59,7 @@ Constraints:
 
 ## Task Routing
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Route common task types to the correct source of truth, Skill, and validation path.
 
@@ -111,7 +111,7 @@ Constraints:
 
 ## Change Workflow
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define the repository-level contract for behavioral changes.
 
@@ -141,7 +141,7 @@ Constraints:
 
 ## Engineering Invariants
 
-<!--
+<!-- harness:placeholder
 Purpose:
 List durable engineering rules that must remain true across implementation changes.
 
@@ -179,7 +179,7 @@ Avoid:
 
 ## Completion Criteria
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define repository-wide checks required before an agent may report work as complete.
 
@@ -219,7 +219,7 @@ Constraints:
 
 ## Commands
 
-<!--
+<!-- harness:placeholder
 Purpose:
 List stable, high-value commands agents are expected to use regularly.
 

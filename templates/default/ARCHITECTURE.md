@@ -2,7 +2,7 @@
 
 ## System Overview
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Provide a concise top-level architectural summary of the system.
 
@@ -32,7 +32,7 @@ Constraints:
 
 ## Technology Architecture
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe the major technologies that shape the architecture and explain their responsibilities.
 
@@ -65,7 +65,7 @@ Constraints:
 
 ## Repository Structure
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe how the source tree maps to architectural responsibilities.
 
@@ -98,7 +98,7 @@ Constraints:
 
 ## Major Components
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe the major architectural components and what each component owns.
 
@@ -132,7 +132,7 @@ Constraints:
 
 ## Dependency Boundaries
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Define allowed dependency directions between architectural layers, modules, or domains.
 
@@ -158,7 +158,7 @@ Constraints:
 
 ## Data Flow
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Explain how important data moves through the system.
 
@@ -190,7 +190,7 @@ Constraints:
 
 ## State Management
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe where application state lives and which layer owns each type of state.
 
@@ -217,7 +217,7 @@ Constraints:
 
 ## Interfaces and Integrations
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe important architectural boundaries between this system and external systems.
 
@@ -246,7 +246,7 @@ Constraints:
 
 ## Runtime and Deployment
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe the architecture as it exists at runtime.
 
@@ -268,7 +268,7 @@ Constraints:
 
 ## Cross-Cutting Concerns
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Identify architectural concerns that affect multiple parts of the system.
 
@@ -298,7 +298,7 @@ Constraints:
 
 ## Architectural Invariants
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Capture architecture-specific rules that must remain true as the system evolves.
 
@@ -323,7 +323,7 @@ Constraints:
 
 ## Architectural Decisions
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Record important architecture decisions that affect future implementation choices.
 
@@ -354,7 +354,7 @@ Constraints:
 
 ## Known Constraints
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Document constraints that materially limit architecture or implementation choices.
 
@@ -375,7 +375,7 @@ Constraints:
 
 ## Evolution Guidance
 
-<!--
+<!-- harness:placeholder
 Purpose:
 Describe how the architecture should evolve without prescribing every future implementation.
 

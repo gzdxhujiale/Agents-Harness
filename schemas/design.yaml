@@ -1,6 +1,6 @@
 id: design
 path: docs/DESIGN.md
-applicability: conditional
+applicability: { when_any: [frontend], present: required, absent: not_applicable }
 sections:
   - { id: principles, title: Design Principles, level: 2, required: true, non_empty: true }
   - { id: visual, title: Visual Language, level: 2, required: true, non_empty: true }
@@ -21,4 +21,4 @@ sections:
   - { id: microcopy, title: Content and Microcopy, level: 2, required: true, non_empty: true }
   - { id: consistency, title: Design Consistency, level: 2, required: true, non_empty: true }
   - { id: review, title: Design Review Criteria, level: 2, required: true, non_empty: true }
-rules: { section_order: strict }
+rules: { section_order: strict, placeholder_forbidden: true }
