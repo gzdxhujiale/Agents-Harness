@@ -8,7 +8,7 @@ description: Produce an evidence-backed quality assessment in docs/QUALITY_SCORE
 
 Measure deterministic evidence first: configured build, typecheck, lint, tests, coverage, document validation, dependency/static analysis, and documented architecture, security, reliability, and frontend findings. Evaluate findings against any dedicated scoring configuration, explain the evidence, then update applicable sections in the quality schema.
 
-Run `xxx validate docs/QUALITY_SCORE.md --json`, repair actionable failures, and repeat until valid.
+Run `AIharness validate docs/QUALITY_SCORE.md --json`, repair actionable failures, and repeat until valid.
 
 ## Scoring Rules
 

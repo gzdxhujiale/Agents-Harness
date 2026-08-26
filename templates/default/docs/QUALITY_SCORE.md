@@ -1,9 +1,25 @@
 # Quality Score
 
-<!-- Record quality goals and measurement criteria. -->
+## Quality Summary
 
-## Criteria
+<!-- harness:placeholder: Summarize evidence, not an unsupported score. -->
 
-<!-- Add criteria. -->
+## Scoring Model
 
-now:not_applicable
+<!-- harness:placeholder: State the evidence-backed model if configured. -->
+
+## Architecture Quality
+
+<!-- harness:placeholder: Cite architecture evidence. -->
+
+## Quality Risks
+
+<!-- harness:placeholder: Record verified risks. -->
+
+## Improvement Priorities
+
+<!-- harness:placeholder: Prioritize evidence-backed actions. -->
+
+## Score History
+
+<!-- harness:placeholder: Record only measured history. -->

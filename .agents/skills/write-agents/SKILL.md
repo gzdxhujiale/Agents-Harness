@@ -10,10 +10,10 @@ Maintain the repository routing and working contract, not a technical encycloped
 
 ## Workflow
 
-1. Run `xxx inspect` and `xxx status`; inspect the repository layout, managed documents, available Skills, package scripts, and configured deterministic checks.
+1. Run `AIharness inspect` and `AIharness status`; inspect the repository layout, managed documents, available Skills, package scripts, and configured deterministic checks.
 2. Verify every mentioned path, command, and Skill exists. Read source configuration where evidence is incomplete.
 3. Populate every applicable section defined by the current AGENTS schema. Keep architecture and domain detail in their dedicated documents.
-4. Run `xxx validate AGENTS.md --json`; repair every actionable issue and repeat until valid.
+4. Run `AIharness validate AGENTS.md --json`; repair every actionable issue and repeat until valid.
 
 ## Evidence Rules
 

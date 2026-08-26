@@ -6,9 +6,9 @@ description: Document verified repository security controls, boundaries, unknown
 
 ## Workflow
 
-Run `xxx context security`, then inspect trust boundaries, authentication and authorization enforcement, sessions, configuration, input/API boundaries, sensitive data, uploads, integrations, headers, and security tooling. Populate applicable schema sections, distinguishing verified controls, known limitations, and unknown behavior.
+Run `AIharness context security`, then inspect trust boundaries, authentication and authorization enforcement, sessions, configuration, input/API boundaries, sensitive data, uploads, integrations, headers, and security tooling. Populate applicable schema sections, distinguishing verified controls, known limitations, and unknown behavior.
 
-Run `xxx validate docs/SECURITY.md --json`; repair actionable errors and repeat until valid.
+Run `AIharness validate docs/SECURITY.md --json`; repair actionable errors and repeat until valid.
 
 ## Safety Rules
 

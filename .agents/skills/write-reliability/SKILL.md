@@ -6,9 +6,9 @@ description: Document verified runtime, failure-handling, and operational reliab
 
 ## Workflow
 
-Run `xxx context reliability`, then inspect runtime entry points, critical flows, dependencies, error paths, retries, timeouts, jobs, queues, concurrency, logging, metrics, tracing, health/readiness, shutdown, recovery, and degradation. Populate applicable schema sections.
+Run `AIharness context reliability`, then inspect runtime entry points, critical flows, dependencies, error paths, retries, timeouts, jobs, queues, concurrency, logging, metrics, tracing, health/readiness, shutdown, recovery, and degradation. Populate applicable schema sections.
 
-Run `xxx validate docs/RELIABILITY.md --json`; repair actionable errors and repeat until valid.
+Run `AIharness validate docs/RELIABILITY.md --json`; repair actionable errors and repeat until valid.
 
 ## Evidence Rules
 

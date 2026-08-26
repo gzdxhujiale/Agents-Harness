@@ -14,4 +14,6 @@ export async function validateDocument(path: string, from = process.cwd()): Prom
   const issues = await validateModel(parseMarkdown(await readFile(absolute, "utf8")), schema, root); const errors = issues.filter((item) => item.severity === "error");
   return { path: schema.path, document: schema.path, schema: schema.id, applicability: schema.applicability ?? "required", valid: errors.length === 0, issues, errors, warnings: issues.filter((item) => item.severity === "warning") };
 }
-export async function validateAllDocuments(from = process.cwd()): Promise<ValidationResult[]> { const root = await findProjectRoot(from); const schemas = await loadBundledSchemas(); return Promise.all(schemas.filter((schema) => schema.applicability !== "not_applicable").map((schema) => validateDocument(join(root, schema.path), root))); }
+// Applicability detection is intentionally outside the schema engine. Until a context layer
+// marks conditional/recommended documents applicable, only required documents are enforced.
+export async function validateAllDocuments(from = process.cwd()): Promise<ValidationResult[]> { const root = await findProjectRoot(from); const schemas = await loadBundledSchemas(); return Promise.all(schemas.filter((schema) => schema.applicability === "required").map((schema) => validateDocument(join(root, schema.path), root))); }

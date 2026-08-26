@@ -7,4 +7,4 @@ sections:
   - { id: secrets, title: Secrets and Configuration, level: 2, required: false, non_empty: true }
   - { id: risks, title: Known Risks or Limitations, level: 2, required: false, non_empty: true }
   - { id: review, title: Security Review Criteria, level: 2, required: false, non_empty: true }
-rules: { section_order: strict }
+rules: { section_order: strict, placeholder_forbidden: true }

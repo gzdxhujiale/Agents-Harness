@@ -6,9 +6,9 @@ description: Write conservative product principles only when explicit repository
 
 ## Workflow
 
-Run `xxx context product`, `xxx inspect`, and inspect product specifications, requirements, accepted proposals, user-visible behavior, terminology, workflows, and constraints. Use this evidence order: explicit specifications, requirements, accepted proposals, behavior, then implementation detail.
+Run `AIharness context product`, `AIharness inspect`, and inspect product specifications, requirements, accepted proposals, user-visible behavior, terminology, workflows, and constraints. Use this evidence order: explicit specifications, requirements, accepted proposals, behavior, then implementation detail.
 
-Populate only applicable schema sections and run `xxx validate docs/PRODUCT_SENSE.md --json`; repair actionable failures until valid.
+Populate only applicable schema sections and run `AIharness validate docs/PRODUCT_SENSE.md --json`; repair actionable failures until valid.
 
 ## Evidence Rules
 

@@ -5,6 +5,20 @@ sections:
   - { id: principles, title: Design Principles, level: 2, required: true, non_empty: true }
   - { id: visual, title: Visual Language, level: 2, required: true, non_empty: true }
   - { id: layout, title: Layout and Spacing, level: 2, required: true, non_empty: true }
+  - { id: typography, title: Typography, level: 2, required: true, non_empty: true }
+  - { id: color, title: Color, level: 2, required: true, non_empty: true }
+  - { id: components, title: Components, level: 2, required: true, non_empty: true }
+  - { id: interactions, title: Interaction Patterns, level: 2, required: true, non_empty: true }
+  - { id: navigation, title: Navigation, level: 2, required: true, non_empty: true }
+  - { id: forms, title: Forms and Input, level: 2, required: true, non_empty: true }
+  - { id: feedback, title: Feedback and Status, level: 2, required: true, non_empty: true }
+  - { id: loading, title: Loading States, level: 2, required: true, non_empty: true }
+  - { id: empty, title: Empty States, level: 2, required: true, non_empty: true }
+  - { id: error, title: Error States, level: 2, required: true, non_empty: true }
+  - { id: responsive, title: Responsive Design, level: 2, required: true, non_empty: true }
   - { id: accessibility, title: Accessibility, level: 2, required: true, non_empty: true }
+  - { id: motion, title: Motion and Animation, level: 2, required: true, non_empty: true }
+  - { id: microcopy, title: Content and Microcopy, level: 2, required: true, non_empty: true }
+  - { id: consistency, title: Design Consistency, level: 2, required: true, non_empty: true }
   - { id: review, title: Design Review Criteria, level: 2, required: true, non_empty: true }
 rules: { section_order: strict }

@@ -17,5 +17,5 @@ export interface DocumentSchema {
   path: string;
   applicability?: Applicability;
   sections: SectionSchema[];
-  rules?: { section_order?: "strict" | "none"; minimum_meaningful_content?: number; required_patterns?: PatternRule[]; forbidden_patterns?: PatternRule[]; references?: ReferenceRule[] };
+  rules?: { section_order?: "strict" | "none"; placeholder_forbidden?: boolean; minimum_meaningful_content?: number; required_patterns?: PatternRule[]; forbidden_patterns?: PatternRule[]; references?: ReferenceRule[] };
 }

@@ -6,9 +6,9 @@ description: Write frontend implementation guidance from verified framework and 
 
 ## Workflow
 
-Use only when frontend code exists. Run `xxx context frontend`, then inspect bootstrap, routing, providers, source ownership, components, design-system integration, styling, state, remote data, forms, hooks, effects, TypeScript, testing, performance, and accessibility.
+Use only when frontend code exists. Run `AIharness context frontend`, then inspect bootstrap, routing, providers, source ownership, components, design-system integration, styling, state, remote data, forms, hooks, effects, TypeScript, testing, performance, and accessibility.
 
-Populate applicable schema sections from current repeated conventions. Run `xxx validate docs/FRONTEND.md --json`, fix every actionable issue, and repeat until valid.
+Populate applicable schema sections from current repeated conventions. Run `AIharness validate docs/FRONTEND.md --json`, fix every actionable issue, and repeat until valid.
 
 ## Boundaries and Evidence
 

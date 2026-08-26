@@ -1,10 +1,13 @@
 # Product Sense
 
-<!-- Define user needs, outcomes, and product principles. -->
+## Product Principles
 
-## Users
+<!-- harness:placeholder: Populate only with verified product principles. -->
 
-<!-- Add user context. -->
+## Product Evidence
 
+<!-- harness:placeholder: Cite explicit product specifications or accepted behavior. -->
 
-now:not_applicable
+## Product Decision Criteria
+
+<!-- harness:placeholder: Record only verified durable decision criteria. -->

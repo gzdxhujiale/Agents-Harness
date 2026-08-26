@@ -5,8 +5,19 @@ sections:
   - { id: overview, title: Frontend Overview, level: 2, required: true, non_empty: true }
   - { id: source, title: Source Structure, level: 2, required: true, non_empty: true }
   - { id: components, title: Component Design, level: 2, required: true, non_empty: true }
+  - { id: design-system, title: Design System Usage, level: 2, required: true, non_empty: true }
   - { id: styling, title: Styling, level: 2, required: true, non_empty: true }
   - { id: state, title: State Management, level: 2, required: true, non_empty: true }
+  - { id: data, title: Data Fetching, level: 2, required: true, non_empty: true }
+  - { id: routing, title: Routing and Navigation, level: 2, required: true, non_empty: true }
+  - { id: forms, title: Forms and Validation, level: 2, required: true, non_empty: true }
+  - { id: states, title: Loading, Empty, and Error States, level: 2, required: true, non_empty: true }
+  - { id: effects, title: Effects and Side Effects, level: 2, required: true, non_empty: true }
+  - { id: hooks, title: Hooks and Reusable Logic, level: 2, required: true, non_empty: true }
+  - { id: typescript, title: TypeScript, level: 2, required: true, non_empty: true }
+  - { id: performance, title: Performance, level: 2, required: true, non_empty: true }
+  - { id: accessibility, title: Accessibility Implementation, level: 2, required: true, non_empty: true }
   - { id: testing, title: Testing, level: 2, required: true, non_empty: true }
+  - { id: invariants, title: Frontend Invariants, level: 2, required: true, non_empty: true }
   - { id: review, title: Frontend Review Criteria, level: 2, required: true, non_empty: true }
 rules: { section_order: strict }
