@@ -7,7 +7,7 @@
     "AIharness": "./dist/cli.js"
   },
   "exports": "./dist/index.js",
-  "files": ["dist", "templates", "schemas"],
+  "files": ["dist", "templates", "schemas", ".agents"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsx src/cli.ts",
