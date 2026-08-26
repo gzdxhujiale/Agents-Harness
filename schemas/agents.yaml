@@ -1,0 +1,12 @@
+id: agents
+path: AGENTS.md
+applicability: required
+sections:
+  - { id: project, title: Project, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: repository-map, title: Repository Map, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: task-routing, title: Task Routing, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: change-workflow, title: Change Workflow, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: invariants, title: Engineering Invariants, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: completion, title: Completion Criteria, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: commands, title: Commands, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+rules: { section_order: strict }

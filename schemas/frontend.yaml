@@ -1,0 +1,12 @@
+id: frontend
+path: docs/FRONTEND.md
+applicability: conditional
+sections:
+  - { id: overview, title: Frontend Overview, level: 2, required: true, non_empty: true }
+  - { id: source, title: Source Structure, level: 2, required: true, non_empty: true }
+  - { id: components, title: Component Design, level: 2, required: true, non_empty: true }
+  - { id: styling, title: Styling, level: 2, required: true, non_empty: true }
+  - { id: state, title: State Management, level: 2, required: true, non_empty: true }
+  - { id: testing, title: Testing, level: 2, required: true, non_empty: true }
+  - { id: review, title: Frontend Review Criteria, level: 2, required: true, non_empty: true }
+rules: { section_order: strict }

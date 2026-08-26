@@ -1,0 +1,19 @@
+id: architecture
+path: ARCHITECTURE.md
+applicability: required
+sections:
+  - { id: overview, title: System Overview, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: technology, title: Technology Architecture, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: repository, title: Repository Structure, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: components, title: Major Components, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: boundaries, title: Dependency Boundaries, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: flow, title: Data Flow, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: state, title: State Management, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: interfaces, title: Interfaces and Integrations, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: runtime, title: Runtime and Deployment, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: concerns, title: Cross-Cutting Concerns, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: invariants, title: Architectural Invariants, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: decisions, title: Architectural Decisions, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: constraints, title: Known Constraints, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: evolution, title: Evolution Guidance, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+rules: { section_order: strict }

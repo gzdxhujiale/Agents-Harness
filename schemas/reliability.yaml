@@ -1,0 +1,11 @@
+id: reliability
+path: docs/RELIABILITY.md
+applicability: recommended
+sections:
+  - { id: runtime, title: Runtime Overview, level: 2, required: false, non_empty: true }
+  - { id: dependencies, title: Critical Dependencies, level: 2, required: false, non_empty: true }
+  - { id: failures, title: Failure Modes, level: 2, required: false, non_empty: true }
+  - { id: observability, title: Observability, level: 2, required: false, non_empty: true }
+  - { id: recovery, title: Recovery, level: 2, required: false, non_empty: true }
+  - { id: review, title: Reliability Review Criteria, level: 2, required: false, non_empty: true }
+rules: { section_order: strict }

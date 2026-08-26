@@ -1,0 +1,11 @@
+id: quality-score
+path: docs/QUALITY_SCORE.md
+applicability: optional
+sections:
+  - { id: summary, title: Quality Summary, level: 2, required: false, non_empty: true }
+  - { id: model, title: Scoring Model, level: 2, required: false, non_empty: true }
+  - { id: architecture, title: Architecture Quality, level: 2, required: false, non_empty: true }
+  - { id: risks, title: Quality Risks, level: 2, required: false, non_empty: true }
+  - { id: priorities, title: Improvement Priorities, level: 2, required: false, non_empty: true }
+  - { id: history, title: Score History, level: 2, required: false, non_empty: true }
+rules: { section_order: strict }

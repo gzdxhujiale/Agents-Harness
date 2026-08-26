@@ -1,0 +1,10 @@
+id: design
+path: docs/DESIGN.md
+applicability: conditional
+sections:
+  - { id: principles, title: Design Principles, level: 2, required: true, non_empty: true }
+  - { id: visual, title: Visual Language, level: 2, required: true, non_empty: true }
+  - { id: layout, title: Layout and Spacing, level: 2, required: true, non_empty: true }
+  - { id: accessibility, title: Accessibility, level: 2, required: true, non_empty: true }
+  - { id: review, title: Design Review Criteria, level: 2, required: true, non_empty: true }
+rules: { section_order: strict }

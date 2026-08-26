@@ -1,0 +1,8 @@
+id: product-sense
+path: docs/PRODUCT_SENSE.md
+applicability: optional
+sections:
+  - { id: principles, title: Product Principles, level: 2, required: false, non_empty: true }
+  - { id: evidence, title: Product Evidence, level: 2, required: false, non_empty: true }
+  - { id: decisions, title: Product Decision Criteria, level: 2, required: false, non_empty: true }
+rules: { section_order: strict }
