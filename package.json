@@ -1,7 +1,6 @@
 {
   "name": "@hujiale2609/ai-harness",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
   "description": "Repository-level AI development harness CLI",
   "bin": {
     "AIharness": "./dist/cli.js"
@@ -17,13 +16,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "11.23.0",
-      "onFail": "download"
-    }
-  },
   "packageManager": "pnpm@11.23.0",
   "type": "module",
   "dependencies": {
