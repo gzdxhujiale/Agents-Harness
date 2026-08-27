@@ -3,12 +3,17 @@
   "version": "1.0.1",
   "description": "Repository-level AI development harness CLI",
   "bin": {
-    "AIharness": "./dist/cli.js",
-    "aiharness": "./dist/cli.js",
-    "ai-harness": "./dist/cli.js"
+    "AIharness": "dist/cli.js",
+    "aiharness": "dist/cli.js",
+    "ai-harness": "dist/cli.js"
   },
   "exports": "./dist/index.js",
-  "files": ["dist", "templates", "schemas", ".agents"],
+  "files": [
+    "dist",
+    "templates",
+    "schemas",
+    ".agents"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsx src/cli.ts",
