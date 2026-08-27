@@ -69,22 +69,31 @@ Constraints:
 Purpose:
 Describe how the source tree maps to architectural responsibilities.
 
-Include only major architectural locations such as:
-- application entry points
-- UI / components
-- domain / application logic
-- infrastructure / integrations
-- API / server code
-- tests
-- configuration
-- generated code
+Include the architectural locations that exist in the repository, such as:
+- `src/features/` — domain-oriented feature modules and their owned UI, API contracts, and models
+- `src/components/` — business-independent, stably reusable presentation components
+- `src/shared/` — cross-domain infrastructure and transport mechanisms
+- application entry points and routing
+- tests and configuration, when present
 
 Example format:
-- `src/app/` — application composition and routing
-- `src/components/` — reusable UI components
-- `src/features/` — feature or domain-oriented modules
-- `src/lib/` — shared infrastructure and utilities
-- `tests/` — automated verification
+
+```text
+src/
+├─ shared/
+│  └─ api/                 # Cross-domain transport mechanisms only; no domain URLs or DTOs
+├─ components/             # Business-independent presentation components with stable reuse boundaries
+│  └─ page-header/         # Shared page-frame elements, such as breadcrumbs and page titles
+└─ features/
+   └─ <feature>/
+      ├─ <Feature>Page.tsx # Domain page composition
+      ├─ api/              # Domain API contracts and calls
+      ├─ model/            # Domain DTOs, state, and pure types
+      ├─ components/       # UI used only by this feature
+      └─ <feature>.css     # Complex styles needed by this feature
+```
+
+New functionality belongs under `src/features/<feature>/`. Do not place domain logic in root components or shared modules.
 
 Examples illustrate structure only.
 Do not include paths that do not exist.
