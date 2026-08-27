@@ -2,7 +2,7 @@
 import { Command } from "commander";
 import { initializeHarness, inspectProject, getProjectContext, validateAllDocuments, validateDocument, getHarnessStatus } from "./index.js";
 
-const program = new Command().name("AIharness").description("Repository-level AI development harness").version("1.0.0");
+const program = new Command().name("AIharness").description("Repository-level AI development harness").version("1.0.1");
 program.command("init [directory]").description("Initialize a harness in a project directory").action(async (directory: string | undefined) => { const result = await initializeHarness(directory); for (const file of result.files) console.log(`${file.status.padEnd(8)} ${file.path}`); });
 program.command("inspect [directory]").description("Inspect a project and persist its facts").action(async (directory: string | undefined) => { console.log(JSON.stringify(await inspectProject(directory), null, 2)); });
 program.command("context <domain> [directory]").description("Read documents for a project domain").action(async (domain: string, directory: string | undefined) => { const result = await getProjectContext(domain, directory); console.log(result.documents.map((document) => `# ${document.path}\n\n${document.content}`).join("\n\n")); });
