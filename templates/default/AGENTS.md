@@ -75,24 +75,29 @@ Example format:
   - Read: `ARCHITECTURE.md`
   - Skill: `write-architecture`
   - Source of truth: repository code + `ARCHITECTURE.md`
-  - Validate: `xxx validate ARCHITECTURE.md --json`
+  - Validate: `AIharness validate ARCHITECTURE.md --json`
 
 - Security work
   - Read: `docs/SECURITY.md`
   - Skill: `write-security`
   - Source of truth: security-relevant repository code + `docs/SECURITY.md`
-  - Validate: `xxx validate docs/SECURITY.md --json`
+  - Validate: `AIharness validate docs/SECURITY.md --json`
 
 - Reliability work
   - Read: `docs/RELIABILITY.md`
   - Skill: `write-reliability`
   - Source of truth: runtime, deployment, observability, and failure-handling code
-  - Validate: `xxx validate docs/RELIABILITY.md --json`
+  - Validate: `AIharness validate docs/RELIABILITY.md --json`
 
 - Repository documentation bootstrap
   - Skill: `bootstrap-docs`
-  - Inspect: `xxx inspect`
-  - Status: `xxx status`
+  - Inspect: `AIharness inspect`
+  - Status: `AIharness status`
+
+- Managed documentation change
+  - Explore: `AIharness explore --json`
+  - Skills: `harness-explore`, `harness-propose`, `harness-apply`, `harness-verify`
+  - Work in: `.aiharness/changes/<change-name>/`
 
 - Behavioral change
   - Read: `openspec/specs/`
@@ -130,6 +135,12 @@ Typical structure:
 - `openspec/changes/<change-name>/design.md`
 - `openspec/changes/<change-name>/tasks.md`
 - `openspec/changes/archive/`
+
+For managed documentation changes, use the Harness workflow rather than creating files ad hoc:
+- `AIharness explore --json` — inspect evidence and prerequisites without editing documents
+- `AIharness propose <change-name> --documents <paths>` — create a document-update proposal
+- `AIharness apply <change-name> --json` — obtain validated implementation instructions
+- `AIharness verify <change-name> --json` — validate the proposal and every planned document
 
 Constraints:
 - Do not duplicate detailed Skill instructions.
@@ -199,14 +210,14 @@ Example for implementation work:
 - Type checking passes.
 - Lint passes.
 - Build succeeds when applicable.
-- Modified managed documents pass `xxx validate`.
+- Modified managed documents pass `AIharness validate`.
 - Required change verification passes.
 - No required deterministic check is failing.
 
 Example for managed documentation work:
 - Project facts have been inspected when needed.
 - The document contains only verified repository facts.
-- The document passes `xxx validate <file> --json`.
+- The document passes `AIharness validate <file> --json`.
 - Reported validation errors have been resolved.
 
 Constraints:
@@ -228,13 +239,18 @@ For each command:
 - Provide one short purpose statement.
 
 Example format:
-- `xxx inspect` — scan verified repository facts
-- `xxx inspect --json` — return repository facts in machine-readable form
-- `xxx context <domain>` — produce task-specific repository context
-- `xxx context <domain> --json` — return task-specific context in machine-readable form
-- `xxx validate [file]` — validate one or all managed artifacts
-- `xxx validate [file] --json` — return structured validation results
-- `xxx status` — show Harness state and documentation readiness
+- `AIharness inspect` — scan verified repository facts
+- `AIharness inspect --json` — return repository facts in machine-readable form
+- `AIharness init` — add missing templates that are applicable to the current repository without overwriting existing files
+- `AIharness context <domain>` — produce task-specific repository context
+- `AIharness context <domain> --json` — return task-specific context in machine-readable form
+- `AIharness explore --json` — explore document-update prerequisites without writing files
+- `AIharness propose <change> --documents <paths>` — create a structured document-update proposal
+- `AIharness apply <change> --json` — validate a proposal and return agent instructions
+- `AIharness verify <change> --json` — verify a proposal and all planned documents
+- `AIharness validate [file]` — validate one or all managed artifacts
+- `AIharness validate [file] --json` — return structured validation results
+- `AIharness status` — show Harness state and documentation readiness
 - `pnpm test` — run automated tests
 - `pnpm lint` — run lint checks
 - `pnpm typecheck` — run type checking

@@ -16,4 +16,14 @@ sections:
   - { id: decisions, title: Architectural Decisions, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: constraints, title: Known Constraints, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: evolution, title: Evolution Guidance, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-rules: { section_order: strict }
+rules:
+  section_order: strict
+  conditional_subsections:
+    - when_any: [server_api, background_jobs, queue]
+      parent: Repository Structure
+      title: Backend Structure
+      level: 3
+      minimum_verified_path_entries: 1
+      path_entries_require_responsibility: true
+      required_subsections:
+        - { title: Dependency Boundaries, level: 4, non_empty: true }

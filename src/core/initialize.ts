@@ -2,7 +2,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { FileResult, HarnessState, InitializeResult } from "../types.js";
-import { exists } from "./paths.js";
+import { exists, resolveHarnessDirectory } from "./paths.js";
+import { detectCapabilities } from "./applicability/detect.js";
+import { resolveApplicability } from "./applicability/resolve.js";
+import { loadBundledSchemas } from "./schema/loader.js";
 
 const templateRoot = resolve(fileURLToPath(new URL("../../templates/default", import.meta.url)));
 const bundledSkillRoot = resolve(fileURLToPath(new URL("../../.agents/skills", import.meta.url)));
@@ -16,9 +19,13 @@ const directoryTemplates = [
   ".agents/skills/write-frontend/SKILL.md",
   ".agents/skills/write-product-sense/SKILL.md",
   ".agents/skills/assess-quality/SKILL.md",
+  ".agents/skills/harness-explore/SKILL.md",
+  ".agents/skills/harness-propose/SKILL.md",
+  ".agents/skills/harness-apply/SKILL.md",
+  ".agents/skills/harness-verify/SKILL.md",
+  ".agents/skills/write-backend/SKILL.md",
 ];
-const markdownTemplates = ["AGENTS.md", "ARCHITECTURE.md", "docs/DESIGN.md", "docs/FRONTEND.md", "docs/PRODUCT_SENSE.md", "docs/QUALITY_SCORE.md", "docs/RELIABILITY.md", "docs/SECURITY.md"];
-const emptyDirectories = [".xxx/schemas", "docs/product-specs", "docs/references", "docs/generated"];
+const alwaysInstalledSkills = directoryTemplates.filter((path) => path !== ".agents/skills/write-backend/SKILL.md");
 
 async function templateFor(path: string): Promise<string> {
   if (path.startsWith(".agents/skills/")) return readFile(join(bundledSkillRoot, path.slice(".agents/skills/".length)), "utf8");
@@ -37,18 +44,24 @@ export async function initializeHarness(target = process.cwd()): Promise<Initial
   const root = resolve(target);
   await mkdir(root, { recursive: true });
   const results: FileResult[] = [];
-  for (const path of [...markdownTemplates, ...directoryTemplates]) await addTemplate(root, path, results);
+  const [schemas, capabilities] = await Promise.all([loadBundledSchemas(), detectCapabilities(root)]);
+  const applicableDocuments = schemas.filter((schema) => ["required", "recommended"].includes(resolveApplicability(schema, capabilities).state)).map((schema) => schema.path);
+  const backendApplicable = applicableDocuments.includes("docs/BACKEND.md");
+  const skills = backendApplicable ? directoryTemplates : alwaysInstalledSkills;
+  for (const path of [...applicableDocuments, ...skills]) await addTemplate(root, path, results);
+  const harnessDirectory = await resolveHarnessDirectory(root);
+  const emptyDirectories = [`${harnessDirectory}/changes`, "docs/product-specs", "docs/references", "docs/generated"];
   for (const path of emptyDirectories) {
     const target = join(root, path);
     const present = await exists(target);
     await mkdir(target, { recursive: true });
     results.push({ path, status: present ? "existing" : "created" });
   }
-  const statePath = join(root, ".xxx/state.json");
-  if (await exists(statePath)) results.push({ path: ".xxx/state.json", status: "skipped" });
-  else { const state: HarnessState = { version: 1, initializedAt: new Date().toISOString() }; await mkdir(dirname(statePath), { recursive: true }); await writeFile(statePath, JSON.stringify(state, null, 2) + "\n"); results.push({ path: ".xxx/state.json", status: "created" }); }
-  const inspectPath = join(root, ".xxx/inspect.json");
-  if (await exists(inspectPath)) results.push({ path: ".xxx/inspect.json", status: "skipped" });
-  else { await writeFile(inspectPath, JSON.stringify({ status: "not_inspected" }, null, 2) + "\n"); results.push({ path: ".xxx/inspect.json", status: "created" }); }
+  const statePath = join(root, harnessDirectory, "state.json");
+  if (await exists(statePath)) results.push({ path: `${harnessDirectory}/state.json`, status: "skipped" });
+  else { const state: HarnessState = { version: 1, initializedAt: new Date().toISOString() }; await mkdir(dirname(statePath), { recursive: true }); await writeFile(statePath, JSON.stringify(state, null, 2) + "\n"); results.push({ path: `${harnessDirectory}/state.json`, status: "created" }); }
+  const inspectPath = join(root, harnessDirectory, "inspect.json");
+  if (await exists(inspectPath)) results.push({ path: `${harnessDirectory}/inspect.json`, status: "skipped" });
+  else { await writeFile(inspectPath, JSON.stringify({ status: "not_inspected" }, null, 2) + "\n"); results.push({ path: `${harnessDirectory}/inspect.json`, status: "created" }); }
   return { root, files: results.map((entry) => ({ ...entry, path: relative(root, join(root, entry.path)) || entry.path })) };
 }

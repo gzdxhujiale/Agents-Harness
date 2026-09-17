@@ -76,6 +76,26 @@ Include the architectural locations that exist in the repository, such as:
 - application entry points and routing
 - tests and configuration, when present
 
+When server, worker, or queue code exists, add a `### Backend Structure` subsection here. It must name only verified backend directories or entry points and explain each responsibility and ownership boundary.
+
+Use this format for a backend directory map; replace every example path with a path that exists in this repository:
+
+```text
+### Backend Structure
+
+- `<backend-entry-or-root>/` — owns the server, worker, or queue runtime boundary
+- `<backend-root>/shared/` — owns cross-domain infrastructure only
+- `<backend-root>/<capability>/` — owns one backend capability and its implementation layers
+
+#### Dependency Boundaries
+
+- `<transport>` may depend on application-facing interfaces, but not persistence implementation details.
+- `<application>` may coordinate domain behavior; it must not depend on transport concerns.
+- `<domain>` must not depend on transport or infrastructure concerns.
+```
+
+The example is a generic style pattern inspired by layered backends, not a prescribed directory layout. Omit layers that are not present, and state only dependency directions supported by the source.
+
 Example format:
 
 ```text
@@ -101,6 +121,7 @@ Do not include paths that do not exist.
 Constraints:
 - Do not enumerate the entire repository.
 - Describe responsibilities and ownership boundaries.
+- When backend capabilities are present, include a meaningful `### Backend Structure` subsection with the verified server-side directory map.
 - Avoid duplicating the general navigation map from `AGENTS.md`.
 -->
 

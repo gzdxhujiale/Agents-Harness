@@ -1,0 +1,14 @@
+id: backend
+path: docs/BACKEND.md
+applicability: { when_any: [server_api, background_jobs, queue, external_dependency], present: required, absent: not_applicable }
+sections:
+  - { id: overview, title: Backend Overview, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: structure, title: Module Boundaries, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: inputs, title: API and Input Handling, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: data, title: Data and External Dependencies, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: processing, title: Background Processing, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: failures, title: Error Handling and Observability, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: security, title: Security Boundaries, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: testing, title: Testing, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: invariants, title: Backend Invariants, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+rules: { section_order: strict }

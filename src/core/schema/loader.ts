@@ -5,7 +5,7 @@ import { parse } from "yaml";
 import type { DocumentSchema } from "./types.js";
 
 export async function loadSchemas(directory = resolve(process.cwd(), "schemas")): Promise<DocumentSchema[]> {
-  const names = (await readdir(directory)).filter((name) => /\.ya?ml$/i.test(name));
+  const names = (await readdir(directory)).filter((name) => /\.ya?ml$/i.test(name)).sort();
   return Promise.all(names.map(async (name) => parse(await readFile(join(directory, name), "utf8")) as DocumentSchema));
 }
 export async function loadBundledSchemas(): Promise<DocumentSchema[]> {

@@ -8,7 +8,7 @@ description: Write ARCHITECTURE.md from verified system structure, boundaries, a
 
 1. Run `AIharness context architecture`, `AIharness inspect`, and inspect entry points, modules, manifests, build/runtime configuration, integrations, persistence, and data/state boundaries as needed.
 2. Prefer current source, then runtime/build configuration, manifests, current specifications, and existing architecture prose.
-3. Populate every applicable schema section with stable responsibilities, boundaries, data flow, and constraints—not individual functions.
+3. Populate every applicable schema section with stable responsibilities, boundaries, data flow, and constraints—not individual functions. When server APIs, workers, or queues are detected, add `### Backend Structure` under `## Repository Structure`. Its directory map must use entries in the form ``- `relative/path/` — responsibility and ownership boundary`` and every path must exist in the repository. Add a non-empty `#### Dependency Boundaries` child subsection that states only source-supported allowed and forbidden dependency directions. A conventional `transport → application → domain → infrastructure` layout is only an example; never add layers or paths merely because they are conventional.
 4. Run `AIharness validate ARCHITECTURE.md --json`, repair all actionable failures, and repeat until valid.
 
 ## Boundaries

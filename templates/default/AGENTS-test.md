@@ -105,7 +105,7 @@ Before completing implementation work:
 - type checking passes
 - lint passes
 - build succeeds when applicable
-- modified managed documents pass `xxx validate`
+- modified managed documents pass `AIharness validate`
 - required change verification passes
 
 Do not report completion while required deterministic checks are failing.

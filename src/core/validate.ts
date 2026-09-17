@@ -14,7 +14,7 @@ export async function validateDocument(path: string, from = process.cwd()): Prom
   if (!schema) { const item = { path, severity: "error" as const, code: "UNKNOWN_DOCUMENT", message: "This is not a managed document." }; return { path, valid: false, issues: [item], errors: [item], warnings: [] }; }
   const applicability = resolveApplicability(schema, await detectCapabilities(root));
   if (!(await exists(absolute))) { const item = { path: schema.path, severity: applicability.state === "required" ? "error" as const : "warning" as const, code: "DOCUMENT_MISSING", message: "Managed document does not exist." }; return { path: schema.path, document: schema.path, schema: schema.id, applicability: applicability.state, valid: item.severity !== "error", issues: [item], errors: item.severity === "error" ? [item] : [], warnings: item.severity === "warning" ? [item] : [] }; }
-  const issues = await validateModel(parseMarkdown(await readFile(absolute, "utf8")), schema, root); const errors = issues.filter((item) => item.severity === "error");
+  const capabilities = await detectCapabilities(root); const issues = await validateModel(parseMarkdown(await readFile(absolute, "utf8")), schema, root, capabilities.capabilities); const errors = issues.filter((item) => item.severity === "error");
   return { path: schema.path, document: schema.path, schema: schema.id, applicability: applicability.state, valid: errors.length === 0, issues, errors, warnings: issues.filter((item) => item.severity === "warning") };
 }
 // Applicability detection is intentionally outside the schema engine. Until a context layer

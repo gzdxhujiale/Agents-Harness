@@ -14,10 +14,20 @@ export interface SectionSchema {
 }
 export interface PatternRule { pattern: string; flags?: string; message?: string; code?: string; severity?: Severity; section?: string; }
 export interface ReferenceRule { path: string; message?: string; code?: string; severity?: Severity; }
+export interface RequiredNestedSectionRule { title: string; level?: number; non_empty?: boolean; }
+export interface ConditionalSubsectionRule {
+  when_any: Capability[];
+  parent: string;
+  title: string;
+  level?: number;
+  required_subsections?: RequiredNestedSectionRule[];
+  minimum_verified_path_entries?: number;
+  path_entries_require_responsibility?: boolean;
+}
 export interface DocumentSchema {
   id: string;
   path: string;
   applicability?: Applicability | ApplicabilityPolicy;
   sections: SectionSchema[];
-  rules?: { section_order?: "strict" | "none"; placeholder_forbidden?: boolean; minimum_meaningful_content?: number; required_patterns?: PatternRule[]; forbidden_patterns?: PatternRule[]; references?: ReferenceRule[] };
+  rules?: { section_order?: "strict" | "none"; placeholder_forbidden?: boolean; minimum_meaningful_content?: number; required_patterns?: PatternRule[]; forbidden_patterns?: PatternRule[]; references?: ReferenceRule[]; conditional_subsections?: ConditionalSubsectionRule[] };
 }
