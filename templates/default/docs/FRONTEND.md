@@ -41,32 +41,31 @@ Purpose:
 Describe how frontend source code is organized and where different responsibilities belong.
 
 Include major locations such as:
-- application bootstrap
-- routes / pages
-- features
-- shared components
-- hooks
-- services / API clients
-- state
-- utilities
-- styles
-- assets
-- tests
+- `src/app/` — application bootstrap, router configuration, global providers, and shell composition
+- `src/features/` — self-contained feature modules (each containing scoped `api/`, `components/`, `hooks/`, `stores/`, `types/` as needed)
+- `src/components/` — business-independent, reusable UI presentation components
+- `src/hooks/` — shared utility hooks
+- `src/lib/` or `src/utils/` — shared utilities and configured library instances (e.g. API client)
+- `src/types/` — application-wide shared types
 
 Example format:
-- `src/app/` — application bootstrap, providers, and global composition
-- `src/pages/` — route-level page composition
-- `src/features/` — feature-specific UI and behavior
+- `src/app/` — application shell, providers, and routes
+- `src/features/<feature>/` — self-contained product functionality
+  - `api/` — feature-specific API declarations (types, fetchers, query/mutation hooks)
+  - `components/` — UI components used only within this feature
+  - `hooks/` — custom hooks specific to this feature
+  - `stores/` — client state specific to this feature
+  - `types/` — domain models specific to this feature
 - `src/components/` — reusable cross-feature UI components
-- `src/hooks/` — reusable frontend hooks
-- `src/services/` — API and external-service access
+- `src/lib/` / `src/utils/` — shared infrastructure and helpers
 
 Examples illustrate structure only.
 Do not include paths that do not exist.
 
 Constraints:
 - Describe ownership, not the entire directory tree.
-- Feature-specific code should remain close to the feature when practical.
+- Code dependencies flow in one direction: `shared → features → app`.
+- Do not build full 5-subfolder skeletons for simple features; start small (`api/` + `components/`) and scale as needed.
 - Shared locations should contain genuinely reusable code.
 -->
 
@@ -163,24 +162,23 @@ Constraints:
 Purpose:
 Define where frontend state belongs and how ownership should be determined.
 
-Classify state before introducing it:
-- local component state
-- shared client state
-- server state
-- URL / router state
-- persisted state
-- derived state
+Classify state into the 5 core categories before introducing it:
+- Component State: `useState`/`useReducer`, strictly isolated within individual components.
+- Application State: client-only global state (e.g. theme, sidebar, session context) managed via lightweight stores (e.g. Zustand) or React Context.
+- Server Cache State: remote asynchronous data managed via dedicated cache clients (e.g. TanStack Query / SWR).
+- Form State: form inputs and validation managed locally (e.g. React Hook Form) to isolate re-renders.
+- URL / Router State: filter criteria, pagination, search queries, and tabs using URL SearchParams as single source of truth.
+- Derived State: calculated during render or with `useMemo`, never synced via `useEffect`.
 
 Guidance:
-- Keep local UI state local when possible.
-- Treat server-owned data as server state.
-- Use URL state for navigation-relevant or shareable state when appropriate.
-- Derive values instead of duplicating state when practical.
-- Introduce global client state only when multiple unrelated areas genuinely require shared ownership.
+- Keep local UI state local; do not promote to a store unless multiple components genuinely require shared ownership.
+- Server data belongs in the query cache; never duplicate server response state into client-side global stores (Zustand/Redux).
+- Use URL state for any view configuration users should be able to bookmark, refresh, or share.
+- Derive values during rendering instead of storing duplicate synchronized state.
 
 Constraints:
 - Avoid duplicating the same source of truth across multiple state systems.
-- Do not copy server data into long-lived client state without a clear reason.
+- Never store remote server responses in general-purpose client stores.
 - Do not make ephemeral UI state globally shared unnecessarily.
 -->
 
@@ -192,25 +190,24 @@ Purpose:
 Define how frontend code communicates with APIs and manages remote data.
 
 Include:
-- API client ownership
-- query / mutation conventions
-- caching
-- request lifecycle
-- cancellation
-- invalidation
-- optimistic updates when applicable
-- error propagation
+- API client ownership and base configuration
+- feature-scoped request declarations (`api/<endpoint>.ts` containing DTO types, fetcher function, and query/mutation hook)
+- query / mutation conventions (TanStack Query / SWR)
+- caching, stale-time, and garbage collection
+- request lifecycle and error handling
+- invalidation and optimistic updates
+- cancellation support
 
 Example:
-- Centralize transport-level behavior in the established API client.
-- Keep feature-specific queries close to the owning feature.
-- Invalidate or update cached data after successful mutations according to the configured data layer.
-- Avoid direct ad hoc network calls when a shared client already exists.
+- Centralize transport-level behavior, auth tokens, and interceptors in `src/lib/api-client` (or equivalent).
+- Structure feature API calls under `features/<feature>/api/`: export request/response types, the fetcher function, and a `use<Endpoint>` query or mutation hook.
+- Invalidate or update cached query keys after successful mutations according to the configured data layer.
+- Avoid raw inline `fetch` or `axios` calls directly inside UI components.
 
 Constraints:
 - Do not duplicate authentication, headers, retries, or serialization logic across components.
 - Do not silently ignore failed requests.
-- Do not invent caching behavior that is not supported by the configured data layer.
+- Keep API error handling consistent through shared interceptors and error boundaries.
 -->
 
 
@@ -316,14 +313,15 @@ Include:
 - cleanup requirements
 
 Guidance:
-- Use effects for synchronization with external systems, not as a default mechanism for ordinary derived state.
-- Clean up subscriptions, timers, and listeners.
-- Prefer explicit event handling over effect-driven chains when possible.
+- Reserve `useEffect` strictly for synchronizing with external systems (DOM APIs, browser subscriptions, timers, WebSockets).
+- Calculate derived state directly during rendering (or with `useMemo` for expensive computations) instead of syncing state in an effect.
+- Handle user actions in event handlers (e.g. `onClick`, `onSubmit`), not by setting state to trigger a `useEffect`.
+- Clean up subscriptions, timers, abort controllers, and event listeners in the effect cleanup function.
 
 Constraints:
-- Avoid unnecessary effects.
-- Avoid effects that merely copy one piece of React state into another.
-- Avoid hidden side-effect chains that make data flow difficult to understand.
+- Do not use `useEffect` to transform data, filter lists, or copy props into local state.
+- Do not use `useEffect` to trigger side effects that originate from a direct user action.
+- Avoid cascading multi-effect chains that make data flow unpredictable.
 -->
 
 
@@ -472,9 +470,13 @@ Purpose:
 Capture durable frontend implementation rules that should remain true as the codebase evolves.
 
 Good examples:
+- No cross-feature imports: `src/features/A` must never directly import from `src/features/B` (promote to shared code).
+- Dependencies flow strictly one direction: `shared → features → app`.
+- Server cache data is managed by dedicated cache clients and never stored in client-side global stores.
+- `useEffect` is reserved exclusively for external system synchronization, never for derived state or user event handling.
+- Avoid root barrel files (`index.ts` re-exporting everything) inside features to preserve Vite tree-shaking performance.
 - Feature-specific code remains owned by its feature.
 - Shared components do not import feature-specific modules.
-- Server state is not duplicated into unrelated global client state without justification.
 - Existing design-system components are preferred over duplicate foundational controls.
 - Network transport behavior is centralized in the established API layer.
 - Generated types are not manually duplicated.
