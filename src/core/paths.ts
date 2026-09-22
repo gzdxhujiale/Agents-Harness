@@ -28,7 +28,14 @@ export async function findProjectRoot(from: string): Promise<string> {
   let current = resolve(from);
   if (!(await isDirectory(current))) current = dirname(current);
   while (true) {
-    if (await exists(join(current, HARNESS_DIR)) || await exists(join(current, LEGACY_HARNESS_DIR)) || await exists(join(current, "package.json"))) return current;
+    if (
+      await exists(join(current, "AGENTS.md")) ||
+      await exists(join(current, ".agents")) ||
+      await exists(join(current, "package.json")) ||
+      await exists(join(current, ".git")) ||
+      await exists(join(current, HARNESS_DIR)) ||
+      await exists(join(current, LEGACY_HARNESS_DIR))
+    ) return current;
     const parent = dirname(current);
     if (parent === current) return resolve(from);
     current = parent;

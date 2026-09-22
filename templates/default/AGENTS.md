@@ -71,33 +71,14 @@ For each supported task type, specify:
 
 Example format:
 
-- Architecture work
-  - Read: `ARCHITECTURE.md`
-  - Skill: `write-architecture`
-  - Source of truth: repository code + `ARCHITECTURE.md`
-  - Validate: `AIharness validate ARCHITECTURE.md --json`
+- Frontend work
+  - Read: `docs/FRONTEND.md`
+  - Skill: `semi-design`
 
-- Security work
-  - Read: `docs/SECURITY.md`
-  - Skill: `write-security`
-  - Source of truth: security-relevant repository code + `docs/SECURITY.md`
-  - Validate: `AIharness validate docs/SECURITY.md --json`
-
-- Reliability work
-  - Read: `docs/RELIABILITY.md`
-  - Skill: `write-reliability`
-  - Source of truth: runtime, deployment, observability, and failure-handling code
-  - Validate: `AIharness validate docs/RELIABILITY.md --json`
-
-- Repository documentation bootstrap
-  - Skill: `bootstrap-docs`
-  - Inspect: `AIharness inspect`
-  - Status: `AIharness status`
 
 - Managed documentation change
-  - Explore: `AIharness explore --json`
-  - Skills: `harness-explore`, `harness-propose`, `harness-apply`, `harness-verify`
-  - Work in: `.aiharness/changes/<change-name>/`
+  - Skills: matching `write-<doc>` Skill (e.g. `write-agents`, `write-architecture`, `write-backend`)
+  - Validate: `AIharness validate <document>` or `AIharness validate`
 
 - Behavioral change
   - Read: `openspec/specs/`
@@ -136,11 +117,9 @@ Typical structure:
 - `openspec/changes/<change-name>/tasks.md`
 - `openspec/changes/archive/`
 
-For managed documentation changes, use the Harness workflow rather than creating files ad hoc:
-- `AIharness explore --json` — inspect evidence and prerequisites without editing documents
-- `AIharness propose <change-name> --documents <paths>` — create a document-update proposal
-- `AIharness apply <change-name> --json` — obtain validated implementation instructions
-- `AIharness verify <change-name> --json` — validate the proposal and every planned document
+For managed documentation changes, update target documents directly and validate:
+- Use the matching `write-<doc>` Skill (e.g. `write-agents`, `write-architecture`)
+- Run `AIharness validate <document>` or `AIharness validate` to verify schema conformance
 
 Constraints:
 - Do not duplicate detailed Skill instructions.
@@ -244,10 +223,6 @@ Example format:
 - `AIharness init` — add missing templates that are applicable to the current repository without overwriting existing files
 - `AIharness context <domain>` — produce task-specific repository context
 - `AIharness context <domain> --json` — return task-specific context in machine-readable form
-- `AIharness explore --json` — explore document-update prerequisites without writing files
-- `AIharness propose <change> --documents <paths>` — create a structured document-update proposal
-- `AIharness apply <change> --json` — validate a proposal and return agent instructions
-- `AIharness verify <change> --json` — verify a proposal and all planned documents
 - `AIharness validate [file]` — validate one or all managed artifacts
 - `AIharness validate [file] --json` — return structured validation results
 - `AIharness status` — show Harness state and documentation readiness
