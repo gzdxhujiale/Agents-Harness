@@ -52,6 +52,8 @@ Example format:
 - TypeScript — primary implementation language
 - React — frontend rendering and component model
 - Vite — local development and production bundling
+- TanStack Query — server state caching and asynchronous data synchronization
+- Zustand — lightweight shared application client state
 - Arco Design — primary UI component system
 - Tailwind CSS — utility styling and layout support
 - pnpm — dependency and workspace management
@@ -70,9 +72,10 @@ Purpose:
 Describe how the source tree maps to architectural responsibilities.
 
 Include the architectural locations that exist in the repository, such as:
-- `src/features/` — domain-oriented feature modules and their owned UI, API contracts, and models
+- `src/app/` — application root, router configuration, global providers, and shell composition
+- `src/features/` — domain-oriented, self-contained feature modules and their owned UI, API contracts, hooks, and types
 - `src/components/` — business-independent, stably reusable presentation components
-- `src/shared/` — cross-domain infrastructure and transport mechanisms
+- `src/shared/` (or `src/lib/`, `src/utils/`) — cross-domain infrastructure and transport mechanisms
 - application entry points and routing
 - tests and configuration, when present
 
@@ -100,20 +103,21 @@ Example format:
 
 ```text
 src/
-├─ shared/
-│  └─ api/                 # Cross-domain transport mechanisms only; no domain URLs or DTOs
+├─ app/                    # Application root, router configuration, providers, and app shell
+├─ shared/                 # Cross-domain transport mechanisms and utility infrastructure
+│  └─ api/                 # Generic HTTP/transport clients; no domain URLs or DTOs
 ├─ components/             # Business-independent presentation components with stable reuse boundaries
 │  └─ page-header/         # Shared page-frame elements, such as breadcrumbs and page titles
-└─ features/
+└─ features/               # Self-contained product domain modules
    └─ <feature>/
       ├─ <Feature>Page.tsx # Domain page composition
-      ├─ api/              # Domain API contracts and calls
-      ├─ model/            # Domain DTOs, state, and pure types
+      ├─ api/              # Feature-scoped API contracts and hooks
+      ├─ model/            # Feature-scoped DTOs, state, and pure types
       ├─ components/       # UI used only by this feature
       └─ <feature>.css     # Complex styles needed by this feature
 ```
 
-New functionality belongs under `src/features/<feature>/`. Do not place domain logic in root components or shared modules.
+New functionality belongs under `src/features/<feature>/`. `src/app/` owns shell composition and routing; do not place domain logic in root components or shared modules.
 
 Examples illustrate structure only.
 Do not include paths that do not exist.
@@ -174,6 +178,8 @@ Include:
 - domain / infrastructure separation when applicable
 
 Example:
+- Dependencies must flow in one direction: `shared/infrastructure → features → app`.
+- Features must remain isolated: `src/features/A` must never directly import from `src/features/B` (promote shared logic to shared code).
 - UI may depend on application or domain interfaces.
 - Domain logic must not depend directly on UI components.
 - Shared utilities must not depend on feature-specific modules.
@@ -225,18 +231,20 @@ Purpose:
 Describe where application state lives and which layer owns each type of state.
 
 Include when applicable:
-- local UI state
-- shared client state
-- server state
+- local / component state (e.g. `useState`, `useReducer`, strictly scoped to individual components)
+- shared application state (minimal client-only global state such as theme or session context)
+- server cache state (managed via dedicated cache clients like TanStack Query / SWR, isolated from client stores)
+- form state (managed close to forms to prevent re-renders)
+- URL / router state (search params and route parameters as single source of truth for view/filter states)
 - persisted state
-- URL / router state
-- cache state
 
 Clarify:
 - source of truth
+- state categories and their designated mechanisms
 - ownership
 - synchronization rules
 - persistence boundaries
+- separation between server cache data and client application state
 
 Constraints:
 - Do not describe state-management libraries that are not present.
@@ -333,7 +341,9 @@ Purpose:
 Capture architecture-specific rules that must remain true as the system evolves.
 
 Good examples:
-- Feature modules must not depend on the internal implementation of other features.
+- Feature modules must remain decoupled and must not import from each other (`no cross-feature imports`).
+- Code dependencies must flow one-way from shared code to features to the application shell.
+- Server data must be managed via dedicated cache clients, not duplicated in client-side global stores.
 - Domain logic must remain independent from presentation components.
 - Generated artifacts must not be manually edited.
 - External integrations must be accessed through defined adapters.

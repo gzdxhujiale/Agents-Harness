@@ -73,7 +73,7 @@ Example format:
 
 - Frontend work
   - Read: `docs/FRONTEND.md`
-  - Skill: `semi-design`
+  - Skill: `semi-design(example)`
 
 
 - Managed documentation change
