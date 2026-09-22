@@ -8,6 +8,10 @@
     "ai-harness": "dist/cli.js"
   },
   "exports": "./dist/index.js",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "files": [
     "dist",
     "templates",
