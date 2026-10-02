@@ -323,10 +323,8 @@ Include only architecturally significant concerns such as:
 Route detailed rules to the appropriate domain document.
 
 Example:
-- Security requirements → `docs/SECURITY.md`
-- Reliability requirements → `docs/RELIABILITY.md`
-- Frontend conventions → `docs/FRONTEND.md`
-- UI/UX design rules → `docs/DESIGN.md`
+- Backend security & reliability requirements → `docs/BACKEND.md`
+- Frontend conventions & UI/UX design rules → `docs/FRONTEND.md`
 
 Constraints:
 - Keep this section architectural.

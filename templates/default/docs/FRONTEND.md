@@ -120,7 +120,7 @@ Example:
 Constraints:
 - Do not recreate components already provided by the configured design system without a clear reason.
 - Do not bypass established design tokens with arbitrary styling.
-- UI/UX rules belong in `docs/DESIGN.md`.
+- Adhere to established design system tokens and component composition patterns.
 -->
 
 
@@ -235,7 +235,7 @@ Guidance:
 Constraints:
 - Do not hide important navigation state only in component memory.
 - Do not introduce competing routing mechanisms.
-- Product navigation behavior belongs in `docs/DESIGN.md`; this section describes implementation.
+- Navigation structure should reflect product information architecture rather than implementation convenience.
 -->
 
 
@@ -264,8 +264,8 @@ Guidance:
 
 Constraints:
 - Do not duplicate validation rules unnecessarily across unrelated components.
-- Do not rely only on placeholder text for field meaning.
-- UI copy and interaction behavior belong in `docs/DESIGN.md`.
+- Do not rely only on placeholder text for field meaning; use persistent labels.
+- Keep validation feedback close to fields and clearly actionable.
 -->
 
 
@@ -432,7 +432,7 @@ Guidance:
 Constraints:
 - Do not use ARIA to compensate for avoidable incorrect semantics.
 - Do not remove focus outlines without an accessible replacement.
-- UI/UX accessibility principles belong in `docs/DESIGN.md`.
+- Ensure all interactive elements are keyboard navigable and maintain accessible contrast.
 -->
 
 
@@ -516,7 +516,7 @@ Review when applicable:
 
 Example:
 Before completing frontend work:
-- verify the implementation matches `docs/DESIGN.md`
+- verify visual hierarchy, layout and component reuse match design system standards
 - verify no unnecessary shared abstraction was introduced
 - verify no duplicate source of truth was introduced
 - verify asynchronous failure states are handled
