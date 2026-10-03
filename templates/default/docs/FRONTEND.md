@@ -1,528 +1,188 @@
-# FRONTEND.md
+# Frontend Engineering Guide
 
-## Frontend Overview
+## Baseline & Tech Stack (技术栈基线与严格模式)
 
 <!-- harness:placeholder
-Purpose:
-Provide a concise overview of how frontend code is implemented in this repository.
+用途:
+明确前端工程的核心语言基线、框架主版本、打包工具链与包管理配置，确保所有代码运行在统一标准下。
 
-Include when detected:
-- frontend framework
-- build system
-- component library
-- styling system
-- routing solution
-- state-management approach
-- server-state / data-fetching approach
-- form solution
-- testing approach
+包含内容:
+- 核心语言与严格模式 (TypeScript, StrictMode)
+- 前端框架与核心渲染模型 (React 19 / Vite)
+- 依赖包管理器与锁定机制 (pnpm / frozen-lockfile)
+- 核心 UI 基础组件系统与主题扩展包
 
-Evidence:
-Use verified repository facts such as:
-- package manifests
-- source structure
-- framework configuration
-- shared providers
-- routing configuration
-- existing components
+格式示例:
+- 编译与运行基线: TypeScript, React 19, Vite；必须保持 `StrictMode` 全局启用。
+- 依赖管理: 统一使用 pnpm，CI 与本地环境严格使用 `--frozen-lockfile`。
+- 设计系统底座: Semi Design (`@douyinfe/semi-ui`, `@semi-bot/semi-theme-xxx`)，图标统一使用 `@douyinfe/semi-icons`。
+- 样式集成: Tailwind CSS v4 (基于 CSS-first `@theme` 接入)，由 `@tailwindcss/vite` 统一插件编译。
 
-Constraints:
-- Describe the actual frontend stack and conventions.
-- Do not infer libraries or patterns that cannot be verified.
-- Exact package versions remain authoritative in package manifests and lockfiles.
-- System-wide architecture belongs in `ARCHITECTURE.md`.
+约束:
+- 仅记录真实引入的基线版本，严禁引入未经批准的备选框架。
 -->
 
 
-## Source Structure
+## Source Structure & Ownership (源码分层与所有权边界)
 
 <!-- harness:placeholder
-Purpose:
-Describe how frontend source code is organized and where different responsibilities belong.
+用途:
+定义前端代码目录组织模型，规范模块边界与严格的单向依赖流向。
 
-Include major locations such as:
-- `src/app/` — application bootstrap, router configuration, global providers, and shell composition
-- `src/features/` — self-contained feature modules (each containing scoped `api/`, `components/`, `hooks/`, `stores/`, `types/` as needed)
-- `src/components/` — business-independent, reusable UI presentation components
-- `src/hooks/` — shared utility hooks
-- `src/lib/` or `src/utils/` — shared utilities and configured library instances (e.g. API client)
-- `src/types/` — application-wide shared types
+包含内容:
+- `src/router/` — Data Router 路由对象、Layout、全局会话 bootstrap 与错误边界
+- `src/features/<feature>/` — 面向产品领域的自包含特性模块
+  - `api/` — 特性专有的 API 契约、fetcher 与 Query/Mutation Hook
+  - `components/` — 仅当前特性使用的 UI 视图与展示组件
+  - `hooks/` / `stores/` — 特性专有的逻辑与局部客户端状态
+  - `model/` (或 `types/`) — 特性专有的领域 DTO 与纯类型
+- `src/components/` — 跨领域、无业务状态、具备高度复用价值的纯展示组件
+- `src/shared/api/` — 统一 HTTP 客户端、拦截器与全局请求头装配
+- `src/shared/` (或 `src/lib/`) — 跨领域通用的基础工具与第三方库封装
 
-Example format:
-- `src/app/` — application shell, providers, and routes
-- `src/features/<feature>/` — self-contained product functionality
-  - `api/` — feature-specific API declarations (types, fetchers, query/mutation hooks)
-  - `components/` — UI components used only within this feature
-  - `hooks/` — custom hooks specific to this feature
-  - `stores/` — client state specific to this feature
-  - `types/` — domain models specific to this feature
-- `src/components/` — reusable cross-feature UI components
-- `src/lib/` / `src/utils/` — shared infrastructure and helpers
+依赖流向铁律:
+`shared (基础设施) → features (业务特性) → router / app (应用外壳与路由编排)`
 
-Examples illustrate structure only.
-Do not include paths that do not exist.
-
-Constraints:
-- Describe ownership, not the entire directory tree.
-- Code dependencies flow in one direction: `shared → features → app`.
-- Do not build full 5-subfolder skeletons for simple features; start small (`api/` + `components/`) and scale as needed.
-- Shared locations should contain genuinely reusable code.
+约束:
+- 业务特性绝对解耦: `src/features/A` 严禁直接导入 `src/features/B` 的代码；跨特性共享逻辑必须提升至 `shared/` 或 `components/`。
+- 根组件与共享层严禁包含任何特定业务领域的硬编码逻辑。
 -->
 
 
-## Component Design
+## UI System & Styling Ownership (组件库与样式所有权分工)
 
 <!-- harness:placeholder
-Purpose:
-Define how React or equivalent UI components should be structured and composed.
+用途:
+通过明确的所有权表格，严格界定基础组件库、Tailwind 工具类与自定义 CSS 的使用边界。
 
-Include:
-- component responsibility
-- component size and scope
-- composition
-- props
-- reusable vs feature-specific components
-- container / presentation separation when applicable
-- component ownership
+包含内容:
+- 样式与组件选型决策对照表
+- Design Tokens 消费原则
+- 响应式布局与断点标准
 
-Example:
-- Keep components focused on one coherent UI responsibility.
-- Prefer composition over large configurable components with many unrelated modes.
-- Keep feature-specific components inside the owning feature.
-- Promote a component to shared code only when reuse is real and stable.
+格式示例:
+| 界面开发需求 | 首选方案 | 约束与说明 |
+| :--- | :--- | :--- |
+| 基础控件 | **Semi Design 原生组件** | 绝大多数业务功能必须优先复用其交互、无障碍支持与键盘导航；严禁私自重复造轮子。 |
+| 页面网格容器、Flex 布局、间距排版、响应式断点 | **Tailwind CSS v4** | 在 JSX 中使用完整、静态可分析的工具类；禁止使用字符串动态拼接类名。 |
+| 全局 Reset、Tokens 映射、第三方库微调、复杂动画关键帧 | **原生 CSS** | 写在 `src/index.css` 或组件同名样式文件中；严格消费 DSM 注入的 `--semi-*` 变量。 |
+| 组件定制主题与品牌色 | **DSM 主题包 / Theme Tokens** | 通过全局主题变量集中分发，严禁在 JSX 中书写硬编码的十六进制颜色或像素值。 |
 
-Constraints:
-- Do not create abstractions only because two components look superficially similar.
-- Do not place feature-specific business rules inside generic shared components.
-- Avoid excessively large components that combine data access, business logic, and complex presentation.
+约束:
+- 严禁在同一个视觉属性上同时混用 Tailwind 类与手写内联 CSS。
+- 业务卡片与通用容器遵循统一圆角与阴影规范，不得引入突兀的第三方风格。
 -->
 
 
-## Design System Usage
+## State Classification & Data Fetching (5类状态划分与远端缓存)
 
 <!-- harness:placeholder
-Purpose:
-Define how the configured UI component system should be used in implementation.
+用途:
+将前端状态严格拆解为 5 大核心类型，界定各类状态的归属所有者，并规范远端数据获取与缓存模式。
 
-Include when applicable:
-- preferred component library
-- shared wrappers
-- theme usage
-- tokens
-- component customization
-- custom component criteria
+包含内容:
+- 5 大状态所有权体系
+- API 客户端与远端数据生命周期
+- 缓存失效、乐观更新与重试策略
 
-Example:
-- Prefer existing design-system components before creating custom foundational controls.
-- Use shared theme tokens instead of duplicating design values.
-- Extend components through supported composition or theming APIs before forking behavior.
+状态分类与归属准则:
+1. 组件状态 (Component State): `useState`/`useReducer`，严格限制在单个组件内部。
+2. 客户端共享状态 (Application State): 纯客户端全局状态（如暗黑模式、侧边栏折叠），由轻量 Store (如 Zustand) 承载。
+3. 服务端缓存状态 (Server Cache State): 远端 API 异步数据，由专用缓存工具 (如 TanStack Query) 承载。
+4. 表单状态 (Form State): 输入数据与校验结果，由表单库就近受控管理，避免全局触发重渲染。
+5. 路由状态 (URL State): 过滤条件、分页、Tab 切换，必须以 URL SearchParams 作为唯一真理源，支持用户分享与刷新。
 
-Constraints:
-- Do not recreate components already provided by the configured design system without a clear reason.
-- Do not bypass established design tokens with arbitrary styling.
-- Adhere to established design system tokens and component composition patterns.
+数据获取与缓存铁律:
+- 严禁将服务端响应数据手动拷贝到全局客户端 Store (如 Zustand/Redux) 中进行双重维护。
+- 衍生状态直接在 render 中计算（或配合 `useMemo`），严禁使用 `useEffect` 监听状态并 `setState` 反向同步。
+- 业务请求统一在 `features/<feature>/api/` 中导出为自定义 Query/Mutation Hook，严禁在 UI 组件内裸写 `fetch` 或 `axios`。
+- 写操作（Mutation）成功后，必须通过精准的 Query Key 做针对性 Invalidate，避免大范围无差别刷新。
+
+约束:
+- 单组件能自洽解决的状态，严禁随意提升到全局。
+- 严禁在各个组件中分散重复写请求头与认证 Token 注入。
 -->
 
 
-## Styling
+## Routing & Data Lifecycle (路由架构与数据生命周期)
 
 <!-- harness:placeholder
-Purpose:
-Define how styling should be implemented consistently.
+用途:
+规范路由配置、受保护路由鉴权、数据生命周期与异步取消支持。
 
-Include when applicable:
-- Tailwind or utility classes
-- CSS modules
-- global styles
-- design tokens
-- theme variables
-- responsive utilities
-- class composition helpers
+包含内容:
+- React Router Data Router 统一管理机制
+- 受保护路由的全局会话 Bootstrap
+- Loader 数据生命周期与并发取消信号 (AbortSignal)
 
-Clarify:
-- when utility classes are appropriate
-- when reusable styles or components are appropriate
-- where global styling is allowed
+格式示例:
+- 统一导航: 应用导航由 `src/router/` 中的路由对象统筹管理，严禁在 Feature 内部创建并行的第二套路由实例。
+- 会话前置绑定: 受保护路由的业务 loader 必须等待全局会话 Bootstrap 确认当前登录用户与活跃租户后，方可发出业务请求；严禁仅依赖 `localStorage` 的旧值臆测会话有效性。
+- 请求生命周期与取消: 所有 loader 与请求 Hook 必须显式传递 `request.signal`，当页面快速切换或导航被取消时，主动终止无效的网络请求，避免旧数据覆盖新页面。
+- 单一数据所有者: 已经由路由 loader 加载的首屏数据，严禁在页面组件的 `useEffect` 中重复发起初始拉取。
 
-Example:
-- Prefer existing spacing, typography, and color tokens.
-- Use utility classes for local layout and presentation when that is the established pattern.
-- Keep global CSS limited to true application-wide behavior.
-
-Constraints:
-- Avoid arbitrary values when an existing token satisfies the requirement.
-- Do not introduce a second competing styling system without architectural justification.
-- Do not encode business logic in styling rules.
+约束:
+- 路由切换过程中的 Pending 状态必须保留既有内容或展示优雅骨架，禁止整屏闪烁。
 -->
 
 
-## State Management
+## Interactive States & Feedback (异步状态与统一交互反馈)
 
 <!-- harness:placeholder
-Purpose:
-Define where frontend state belongs and how ownership should be determined.
+用途:
+强制要求异步操作必须完整覆盖四态设计，并统一用户反馈组件与表单交互规范。
 
-Classify state into the 5 core categories before introducing it:
-- Component State: `useState`/`useReducer`, strictly isolated within individual components.
-- Application State: client-only global state (e.g. theme, sidebar, session context) managed via lightweight stores (e.g. Zustand) or React Context.
-- Server Cache State: remote asynchronous data managed via dedicated cache clients (e.g. TanStack Query / SWR).
-- Form State: form inputs and validation managed locally (e.g. React Hook Form) to isolate re-renders.
-- URL / Router State: filter criteria, pagination, search queries, and tabs using URL SearchParams as single source of truth.
-- Derived State: calculated during render or with `useMemo`, never synced via `useEffect`.
+包含内容:
+- 四大异步交互状态标准 (Loading, Empty, Error, Success)
+- 用户反馈组件使用分级规范 (Toast, Banner, Modal, SideSheet)
+- 表单验证即时反馈与防重提交
 
-Guidance:
-- Keep local UI state local; do not promote to a store unless multiple components genuinely require shared ownership.
-- Server data belongs in the query cache; never duplicate server response state into client-side global stores (Zustand/Redux).
-- Use URL state for any view configuration users should be able to bookmark, refresh, or share.
-- Derive values during rendering instead of storing duplicate synchronized state.
+格式示例:
+1. 四态设计底线:
+   - 加载态 (Loading): 局部更新优先使用行内 Spinner 或骨架屏，避免全局锁屏。
+   - 空状态 (Empty): 必须清楚说明当前无数据的原因（如“暂无任务” vs “无符合筛选条件的结果”）。
+   - 错误态 (Error): 必须提供可理解的错误说明与可点击的“重试”按钮，严禁直接展示原始网络报错或空白死页。
+   - 禁用态 (Disabled): 控件处于不可用状态时，必须提供 Tooltip 解释禁用原因。
 
-Constraints:
-- Avoid duplicating the same source of truth across multiple state systems.
-- Never store remote server responses in general-purpose client stores.
-- Do not make ephemeral UI state globally shared unnecessarily.
+2. 反馈组件使用分级规范:
+   - 轻量临时反馈 (如保存成功、复制成功): 统一使用 `Toast.success()` / `Toast.error()`，自动消失，不打断用户心流。
+   - 页面级持久警告 (如环境配置缺失、配额即将用尽): 使用行内 `<Banner>`。
+   - 破坏性或关键确认 (如删除资产、重置配置): 必须使用模态弹窗 `<Modal>` 进行显式二次确认。
+   - 复杂详情与高频表单抽屉: 统一使用 `<SideSheet>`，替代传统的全屏跳转。
+
+3. 表单交互底线:
+   - 表单项必须具有持久的独立 `<label>`，严禁仅依靠 Placeholder 传递字段含义。
+   - 提交期间必须将提交按钮置为 loading 与 disabled，防止用户误触二次重复提交。
+   - 校验错误信息紧随对应的输入框下方实时提示，校验失败时必须完整保留用户已输入内容。
+
+约束:
+- 严禁仅完成 Happy Path 就宣称前端实现完成。
+- 禁止将请求失败偷换成空状态展示。
 -->
 
 
-## Data Fetching
+## Frontend Invariants & Verification (前端代码红线与验证准出)
 
 <!-- harness:placeholder
-Purpose:
-Define how frontend code communicates with APIs and manages remote data.
-
-Include:
-- API client ownership and base configuration
-- feature-scoped request declarations (`api/<endpoint>.ts` containing DTO types, fetcher function, and query/mutation hook)
-- query / mutation conventions (TanStack Query / SWR)
-- caching, stale-time, and garbage collection
-- request lifecycle and error handling
-- invalidation and optimistic updates
-- cancellation support
-
-Example:
-- Centralize transport-level behavior, auth tokens, and interceptors in `src/lib/api-client` (or equivalent).
-- Structure feature API calls under `features/<feature>/api/`: export request/response types, the fetcher function, and a `use<Endpoint>` query or mutation hook.
-- Invalidate or update cached query keys after successful mutations according to the configured data layer.
-- Avoid raw inline `fetch` or `axios` calls directly inside UI components.
-
-Constraints:
-- Do not duplicate authentication, headers, retries, or serialization logic across components.
-- Do not silently ignore failed requests.
-- Keep API error handling consistent through shared interceptors and error boundaries.
--->
-
-
-## Routing and Navigation
-
-<!-- harness:placeholder
-Purpose:
-Define how route-level frontend behavior should be implemented.
-
-Include when applicable:
-- route ownership
-- route definitions
-- nested layouts
-- route parameters
-- query parameters
-- protected routes
-- redirects
-- navigation state
-
-Guidance:
-- Keep routing concerns at route or application boundaries.
-- Use URL state for information users should be able to bookmark, refresh, or share when appropriate.
-- Preserve predictable browser back / forward behavior.
-
-Constraints:
-- Do not hide important navigation state only in component memory.
-- Do not introduce competing routing mechanisms.
-- Navigation structure should reflect product information architecture rather than implementation convenience.
--->
-
-
-## Forms and Validation
-
-<!-- harness:placeholder
-Purpose:
-Define how forms, input state, and validation should be implemented.
-
-Include:
-- form state ownership
-- schema validation when applicable
-- client validation
-- server validation
-- submission lifecycle
-- field errors
-- form-level errors
-- dirty state
-- reset behavior
-
-Guidance:
-- Treat server-side validation as authoritative for server-owned constraints.
-- Use client-side validation to provide timely user feedback.
-- Preserve user-entered values after recoverable errors.
-- Prevent accidental duplicate submissions.
-
-Constraints:
-- Do not duplicate validation rules unnecessarily across unrelated components.
-- Do not rely only on placeholder text for field meaning; use persistent labels.
-- Keep validation feedback close to fields and clearly actionable.
--->
-
-
-## Loading, Empty, and Error States
-
-<!-- harness:placeholder
-Purpose:
-Define the frontend implementation expectations for non-happy-path states.
-
-Every significant asynchronous UI should consider:
-- loading
-- empty
-- error
-- success
-- partial data
-- retry
-- stale or refreshing state when applicable
-
-Guidance:
-- Prefer localized loading states for localized operations.
-- Preserve existing content during background refresh when appropriate.
-- Provide retry or recovery behavior when the operation is recoverable.
-- Distinguish empty data from request failure.
-
-Constraints:
-- Do not treat the happy path as complete implementation.
-- Do not swallow operational errors.
-- Do not replace meaningful errors with generic messages when useful information is available safely.
--->
-
-
-## Effects and Side Effects
-
-<!-- harness:placeholder
-Purpose:
-Define how frontend side effects should be handled.
-
-Include:
-- lifecycle effects
-- subscriptions
-- timers
-- browser APIs
-- external SDKs
-- synchronization with non-React systems
-- cleanup requirements
-
-Guidance:
-- Reserve `useEffect` strictly for synchronizing with external systems (DOM APIs, browser subscriptions, timers, WebSockets).
-- Calculate derived state directly during rendering (or with `useMemo` for expensive computations) instead of syncing state in an effect.
-- Handle user actions in event handlers (e.g. `onClick`, `onSubmit`), not by setting state to trigger a `useEffect`.
-- Clean up subscriptions, timers, abort controllers, and event listeners in the effect cleanup function.
-
-Constraints:
-- Do not use `useEffect` to transform data, filter lists, or copy props into local state.
-- Do not use `useEffect` to trigger side effects that originate from a direct user action.
-- Avoid cascading multi-effect chains that make data flow unpredictable.
--->
-
-
-## Hooks and Reusable Logic
-
-<!-- harness:placeholder
-Purpose:
-Define how reusable frontend behavior should be extracted.
-
-Include:
-- custom hooks
-- shared logic
-- feature hooks
-- ownership rules
-- public API expectations
-
-Guidance:
-- Extract hooks when they represent coherent reusable behavior.
-- Keep feature-specific hooks inside the owning feature.
-- Keep hooks focused on logic and lifecycle rather than arbitrary code grouping.
-
-Constraints:
-- Do not create hooks solely to reduce line count.
-- Do not hide unrelated side effects behind generic reusable hooks.
-- Avoid overly configurable hooks with unclear ownership.
--->
-
-
-## TypeScript
-
-<!-- harness:placeholder
-Purpose:
-Define frontend TypeScript expectations.
-
-Include:
-- component prop types
-- API types
-- domain types
-- narrowing
-- nullability
-- generated types
-- type ownership
-
-Guidance:
-- Prefer explicit domain types at architectural boundaries.
-- Narrow unknown external data before use.
-- Reuse generated API types when they are authoritative.
-- Keep component props focused and intentional.
-
-Constraints:
-- Avoid `any` unless there is a documented boundary that cannot reasonably be typed.
-- Do not duplicate authoritative generated types manually.
-- Do not use type assertions merely to suppress legitimate type errors.
--->
-
-
-## Performance
-
-<!-- harness:placeholder
-Purpose:
-Define frontend performance practices that should influence implementation.
-
-Include when applicable:
-- render cost
-- code splitting
-- lazy loading
-- list rendering
-- image / asset loading
-- expensive computation
-- network waterfalls
-- bundle impact
-
-Guidance:
-- Optimize demonstrated or reasonably predictable bottlenecks.
-- Keep route or feature boundaries suitable for code splitting when supported.
-- Avoid unnecessary rerenders caused by unstable ownership or duplicated state.
-- Consider network cost when adding new requests.
-
-Constraints:
-- Do not add memoization everywhere by default.
-- Do not trade significant maintainability for speculative micro-optimizations.
-- Measure when performance decisions are non-trivial.
--->
-
-
-## Accessibility Implementation
-
-<!-- harness:placeholder
-Purpose:
-Define technical frontend requirements for implementing accessible UI.
-
-Include:
-- semantic HTML
-- keyboard behavior
-- focus management
-- accessible names
-- ARIA usage
-- form association
-- dynamic announcements
-- reduced-motion support when applicable
-
-Guidance:
-- Prefer native semantic elements before custom ARIA-based equivalents.
-- Preserve visible keyboard focus.
-- Ensure interactive elements remain operable without a pointer.
-- Use design-system accessibility behavior when available.
-
-Constraints:
-- Do not use ARIA to compensate for avoidable incorrect semantics.
-- Do not remove focus outlines without an accessible replacement.
-- Ensure all interactive elements are keyboard navigable and maintain accessible contrast.
--->
-
-
-## Testing
-
-<!-- harness:placeholder
-Purpose:
-Define frontend testing expectations and where different types of tests provide value.
-
-Include when applicable:
-- unit tests
-- component tests
-- integration tests
-- end-to-end tests
-- accessibility tests
-- visual tests
-
-Guidance:
-- Test user-visible behavior rather than implementation details.
-- Prioritize critical workflows, state transitions, and regression-prone behavior.
-- Add regression coverage when fixing meaningful bugs.
-- Use the repository's established testing tools.
-
-Constraints:
-- Do not write brittle tests that depend unnecessarily on internal component structure.
-- Do not remove tests simply to make a change pass.
-- Exact commands belong in `AGENTS.md` or project tooling documentation.
--->
-
-
-## Frontend Invariants
-
-<!-- harness:placeholder
-Purpose:
-Capture durable frontend implementation rules that should remain true as the codebase evolves.
-
-Good examples:
-- No cross-feature imports: `src/features/A` must never directly import from `src/features/B` (promote to shared code).
-- Dependencies flow strictly one direction: `shared → features → app`.
-- Server cache data is managed by dedicated cache clients and never stored in client-side global stores.
-- `useEffect` is reserved exclusively for external system synchronization, never for derived state or user event handling.
-- Avoid root barrel files (`index.ts` re-exporting everything) inside features to preserve Vite tree-shaking performance.
-- Feature-specific code remains owned by its feature.
-- Shared components do not import feature-specific modules.
-- Existing design-system components are preferred over duplicate foundational controls.
-- Network transport behavior is centralized in the established API layer.
-- Generated types are not manually duplicated.
-
-Prefer invariants that are:
-- durable
-- observable
-- enforceable
-- mechanically testable where practical
-
-Constraints:
-- Keep this section frontend-specific.
-- Repository-wide invariants belong in `AGENTS.md`.
-- System-wide architectural boundaries belong in `ARCHITECTURE.md`.
--->
-
-
-## Frontend Review Criteria
-
-<!-- harness:placeholder
-Purpose:
-Define the implementation checks required before significant frontend work may be considered complete.
-
-Review when applicable:
-- code follows established source ownership
-- existing design-system components are reused appropriately
-- state has the correct owner
-- loading, empty, error, and success states are handled
-- form validation and submission behavior are correct
-- responsive behavior is implemented
-- keyboard and accessibility behavior are preserved
-- TypeScript checks pass
-- relevant frontend tests pass
-- lint passes
-- build succeeds when applicable
-- affected managed documentation remains valid
-
-Example:
-Before completing frontend work:
-- verify visual hierarchy, layout and component reuse match design system standards
-- verify no unnecessary shared abstraction was introduced
-- verify no duplicate source of truth was introduced
-- verify asynchronous failure states are handled
-- run the required repository checks
-
-Constraints:
-- Do not report frontend work complete based only on visual appearance.
-- Do not bypass deterministic checks to satisfy completion criteria.
+用途:
+定义前端开发中必须永久遵守的硬性代码红线，并列出提测交付前必须通过的差分验证指令。
+
+前端架构红线清单:
+1. 依赖流向单向: `shared → features → router/app`，严禁跨 Feature 直接引用。
+2. 远端数据入 Query: 远端缓存数据由 Dedicated Query Client 掌管，严禁私自拷贝进 Zustand 等全局客户端 Store。
+3. 纯洁的 `useEffect`: `useEffect` 仅用于与外部 DOM / 定时器同步；严禁用于计算衍生状态，严禁在用户交互事件中通过 setState 间接引爆 effect。
+4. 杜绝 Barrel 桶文件: 避免在特性根目录创建导出全部内部模块的 `index.ts`，以保护构建 Tree-shaking 与局部热更新性能。
+5. 保持焦点与键盘可达: 交互元素保持键盘可导航与焦点可见性，严禁直接使用非交互元素 (如 `<div onClick>`) 替代原生 Button。
+6. 严格类型窄化: 严禁滥用 `any` 绕过校验；无法确定的外部数据使用 `unknown` 并通过 Zod 或类型守卫窄化。
+
+前端交付差分验证指令:
+- 依赖冻结安装: `pnpm --dir frontend install --frozen-lockfile`
+- 类型检查与生产构建: `pnpm --dir frontend build`
+- 静态代码规范检查: `pnpm --dir frontend lint`
+- 针对性单元测试: 使用 `pnpm --dir frontend test` 执行受本次变更影响的测试套件
+- 规范校验: `AIharness validate docs/FRONTEND.md`
+
+约束:
+- 严禁在存在确定性报错（类型报错、Lint 报警、单测未过）时宣布任务完成。
+- UI 交互改动必须经过真实浏览器人工复核。
 -->

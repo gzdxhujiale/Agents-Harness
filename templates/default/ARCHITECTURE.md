@@ -1,436 +1,191 @@
 # ARCHITECTURE.md
 
-## System Overview
+## System Topology & Overview (系统全局拓扑与职责边界)
 
 <!-- harness:placeholder
-Purpose:
-Provide a concise top-level architectural summary of the system.
+用途:
+提供端到端的系统全局拓扑大图，清晰界定客户端、服务端、存储层与外部依赖的运行期边界与核心职责。
 
-Include:
-- system type
-- major architectural style
-- primary runtime boundaries
-- major client-side and server-side responsibilities
-- external systems that are architecturally significant
+包含内容:
+- 核心运行时节点 (如: 浏览器 SPA、Node.js 接入层、Java 核心微服务/单体、异步 Worker)
+- 外部集成边界 (数据库、Redis 缓存、消息队列、统一鉴权、AI 大模型网关等)
+- 端到端的数据通信管道 (HTTP/REST、SSE 流式长连接、RPC 等)
 
-Evidence:
-Use verified repository facts such as:
-- source layout
-- package manifests
-- framework configuration
-- runtime configuration
-- deployment configuration
-- API or server entry points
-
-Constraints:
-- Describe architecture, not product marketing.
-- Do not invent services, components, or deployment topology.
-- Keep this section high-level.
-- Detailed domain behavior belongs in specifications, not here.
--->
-
-
-## Technology Architecture
-
-<!-- harness:placeholder
-Purpose:
-Describe the major technologies that shape the architecture and explain their responsibilities.
-
-Include when applicable:
-- primary language
-- application framework
-- build tooling
-- UI / component system
-- styling system
-- state or data-management libraries
-- backend / runtime framework
-- database / ORM
-- package manager
-- testing / linting / build infrastructure
-
-Example format:
-- TypeScript — primary implementation language
-- React — frontend rendering and component model
-- Vite — local development and production bundling
-- TanStack Query — server state caching and asynchronous data synchronization
-- Zustand — lightweight shared application client state
-- Arco Design — primary UI component system
-- Tailwind CSS — utility styling and layout support
-- pnpm — dependency and workspace management
-
-Constraints:
-- Explain architectural responsibility instead of only listing package names.
-- Treat package manifests and lockfiles as the source of truth for exact versions.
-- Do not duplicate the complete dependency list.
--->
-
-
-## Repository Structure
-
-<!-- harness:placeholder
-Purpose:
-Describe how the source tree maps to architectural responsibilities.
-
-Include the architectural locations that exist in the repository, such as:
-- `src/app/` — application root, router configuration, global providers, and shell composition
-- `src/features/` — domain-oriented, self-contained feature modules and their owned UI, API contracts, hooks, and types
-- `src/components/` — business-independent, stably reusable presentation components
-- `src/shared/` (or `src/lib/`, `src/utils/`) — cross-domain infrastructure and transport mechanisms
-- application entry points and routing
-- tests and configuration, when present
-
-When server, worker, or queue code exists, add a `### Backend Structure` subsection here. It must name only verified backend directories or entry points and explain each responsibility and ownership boundary.
-
-Use this format for a backend directory map; replace every example path with a path that exists in this repository:
-
+格式示例:
 ```text
-### Backend Structure
-
-- `<backend-entry-or-root>/` — owns the server, worker, or queue runtime boundary
-- `<backend-root>/shared/` — owns cross-domain infrastructure only
-- `<backend-root>/<capability>/` — owns one backend capability and its implementation layers
-
-#### Dependency Boundaries
-
-- `<transport>` may depend on application-facing interfaces, but not persistence implementation details.
-- `<application>` may coordinate domain behavior; it must not depend on transport concerns.
-- `<domain>` must not depend on transport or infrastructure concerns.
+Browser (Vite + React SPA)
+  │
+  ▼ [HTTPS / REST & SSE 流式长连接, 透传 Authorization 与 X-Tenant-Id]
+Spring Boot 核心服务 (Java 21 基座)
+  ├─ MySQL 8.0 (业务持久化与租户隔离数据)
+  ├─ Redisson / Redis (分布式队列、信号量限流与并发锁)
+  └─ Spring AI Client / LLM 网关 (大模型调用、向量检索与流式补全)
 ```
 
-The example is a generic style pattern inspired by layered backends, not a prescribed directory layout. Omit layers that are not present, and state only dependency directions supported by the source.
+职责边界划分:
+- 前端 (Browser): 拥有页面视图渲染、用户交互事件响应、客户端局部状态管理与统一错误反馈；绝不直连数据库，绝不自作主张推导后端业务约束。
+- 后端 (Backend): 拥有全业务逻辑编排、权限与租户隔离鉴权、事务提交、并发流控、敏感数据脱敏与数据库操作的唯一权威执行权。
 
-Example format:
+约束:
+- 描述客观已实现的运行期架构拓扑，严禁纸上谈兵编造不存在的服务或中间件。
+- 具体的端侧内部状态逻辑或代码分层应分别下沉至 `docs/FRONTEND.md` 与 `docs/BACKEND.md`。
+-->
 
+
+## Repository Boundaries (顶层资产与仓库边界)
+
+<!-- harness:placeholder
+用途:
+严格定义仓库顶层目录的资产属性、归属职责与隔离原则，防止跨工程代码污染与混乱。
+
+包含内容:
+- 顶层工程目录的职责映射
+- 根目录的定位与纯粹性治理原则
+- 新增顶级目录的准入条件
+
+格式示例:
 ```text
-src/
-├─ app/                    # Application root, router configuration, providers, and app shell
-├─ shared/                 # Cross-domain transport mechanisms and utility infrastructure
-│  └─ api/                 # Generic HTTP/transport clients; no domain URLs or DTOs
-├─ components/             # Business-independent presentation components with stable reuse boundaries
-│  └─ page-header/         # Shared page-frame elements, such as breadcrumbs and page titles
-└─ features/               # Self-contained product domain modules
-   └─ <feature>/
-      ├─ <Feature>Page.tsx # Domain page composition
-      ├─ api/              # Feature-scoped API contracts and hooks
-      ├─ model/            # Feature-scoped DTOs, state, and pure types
-      ├─ components/       # UI used only by this feature
-      └─ <feature>.css     # Complex styles needed by this feature
+repo-root/
+├─ AGENTS.md             # 全仓 Agent 行为总入口与操作红线
+├─ ARCHITECTURE.md       # 系统全局架构拓扑、模块依赖与跨端契约
+├─ docs/                 # 跨领域端侧工程规范 (docs/FRONTEND.md, docs/BACKEND.md)
+├─ openspec/             # 唯一行为规格 (specs/) 与进行中的行为变更生命周期 (changes/)
+├─ database/             # 数据库规范化 DDL、迁移脚本与受控基线测试数据
+├─ frontend/             # 独立的前端工程 (Vite + React，拥有独立 package.json 与构建工具)
+└─ backend/              # 独立的后端工程 (Java + Spring Boot，拥有独立构建脚本与测试)
 ```
 
-New functionality belongs under `src/features/<feature>/`. `src/app/` owns shell composition and routing; do not place domain logic in root components or shared modules.
+边界铁律:
+- 根目录仅承载全仓治理文件、跨端规约与公共规格；严禁将某个具体子工程的依赖配置、运行时源码或构建产物重新放回根目录。
+- 前端与后端工程物理隔离，前端代码严禁以相对路径直接引用后端的类或脚本。
+- 数据库脚本收敛于 `database/`，由后端在运行时负责迁移执行，生成物严禁手工篡改。
+- 不为尚未落地的技术或能力提前预建空的顶层抽象目录。
 
-Examples illustrate structure only.
-Do not include paths that do not exist.
-
-Constraints:
-- Do not enumerate the entire repository.
-- Describe responsibilities and ownership boundaries.
-- When backend capabilities are present, include a meaningful `### Backend Structure` subsection with the verified server-side directory map.
-- Avoid duplicating the general navigation map from `AGENTS.md`.
+约束:
+- 仅列出仓库中真实存在的顶层目录。
+- 阐明为什么设立该边界，而非机械罗列文件树。
 -->
 
 
-## Major Components
+## Dependency Flow & Architecture Invariants (单向依赖流向与架构铁律)
 
 <!-- harness:placeholder
-Purpose:
-Describe the major architectural components and what each component owns.
+用途:
+严格确立模块、层级与领域之间的单向依赖流向，制定全系统必须永久保持的不可逾越的设计红线。
 
-For each major component, capture:
-- responsibility
-- primary inputs
-- primary outputs
-- dependencies
-- important boundaries
+包含内容:
+- 全局单向依赖流向链条 (Unidirectional Dependency Rule)
+- 跨业务特性隔离原则 (No Cross-Feature Direct Import)
+- 展示层与领域层的依赖方向
+- 架构级不变量红线清单
 
-Example format:
+格式示例:
+单向依赖流向链条:
+`基础共享层 (shared / lib) → 业务领域特性层 (features) → 顶层应用外壳 (app / shell)`
 
-### Application Shell
+架构级铁律清单:
+1. 依赖单向流动: 上层可依赖下层，底层共享库绝对禁止反向导入任何特性领域的上层代码。
+2. 特性之间严格解耦: `src/features/A` 绝对禁止直接导入 `src/features/B` 的内部代码；若两个业务领域确实需要共享逻辑或类型，必须将其抽象并晋升至 `shared/` 共享层。
+3. 领域逻辑独立于视图: 核心业务规则与数据校验必须保持纯粹，严禁直接依赖具体 UI 组件或外部传输框架。
+4. 外部系统适配隔离: 访问第三方外部 API、大模型或非受控服务时，必须通过显式定义的防腐层 (Adapter / Client) 访问，严禁业务代码直接耦合第三方原始结构。
+5. 自动生成物禁止手工维护: 代码生成器、数据库快照或编译工具输出的内容，严禁手工进行业务规则修补。
 
-Responsibility:
-- Own application bootstrap, routing, and global providers.
-
-Depends on:
-- UI system
-- feature modules
-- shared infrastructure
-
-Must not:
-- contain feature-specific business logic
-
-Constraints:
-- Prefer stable architectural components over individual files.
-- Do not create components that cannot be verified from the repository.
+约束:
+- 记录能够被 Linter、架构测试 (ArchUnit) 或代码审查机械验证的确定性规则。
+- 避免空洞的主观建议，必须使用“必须 / 严禁”明确界定。
 -->
 
 
-## Dependency Boundaries
+## Cross-Boundary Contracts (跨端通信契约与协议规范)
 
 <!-- harness:placeholder
-Purpose:
-Define allowed dependency directions between architectural layers, modules, or domains.
+用途:
+定义前端与后端之间、或不同服务边界之间通信的统一标准、数据信封、会话透传与错误传播规范。
 
-Include:
-- which layers may depend on which
-- forbidden reverse dependencies
-- shared-module boundaries
-- generated-code boundaries
-- domain / infrastructure separation when applicable
+包含内容:
+- API 通信协议与数据信封 (Response Envelope) 规范
+- 统一认证、会话与多租户上下文的 Header 透传规则
+- 错误码、业务异常与 HTTP 状态码的映射原则
+- 前后端 DTO 与数据库实体的隔离要求
 
-Example:
-- Dependencies must flow in one direction: `shared/infrastructure → features → app`.
-- Features must remain isolated: `src/features/A` must never directly import from `src/features/B` (promote shared logic to shared code).
-- UI may depend on application or domain interfaces.
-- Domain logic must not depend directly on UI components.
-- Shared utilities must not depend on feature-specific modules.
-- Generated code must not become the source of handwritten business rules.
+格式示例:
+统一响应信封规范:
+```json
+{
+  "code": 200,            // 业务状态码: 200 成功，非 200 为具体业务错误
+  "data": { ... },        // 业务负载数据 (成功时返回)
+  "message": "success",   // 面向用户的友好提示或错误摘要
+  "traceId": "req-xxx"    // 全链路排查追踪 ID
+}
+```
 
-Constraints:
-- Document only boundaries the repository actually intends to preserve.
-- Prefer rules that can later be checked mechanically.
-- Avoid vague guidance such as "keep things modular".
+上下文透传 Header 约定:
+- `Authorization: Bearer <token>`: 传递当前用户会话凭证。
+- `X-Tenant-Id: <tenant_id>`: 明确当前操作的活跃租户/工作空间上下文（由网关或受控前端注入，后端严格鉴权校验合法性）。
+
+错误与异常传播原则:
+- 网络传输层错误 (401 未登录, 403 越权, 404 不存在, 500 熔断) 与业务逻辑失败严格分离。
+- 严禁向前端暴露未受控的服务端堆栈轨迹 (Stack Trace)、SQL 报错明细或敏感内部字段。
+
+契约隔离原则:
+- 前端只依赖版本化的 API/DTO 契约；严禁直接根据数据库表结构猜测或复制后端数据结构。
+
+约束:
+- 保持跨端协议层面的通用契约，不要在此处罗列每个业务接口的详细入参。
 -->
 
 
-## Data Flow
+## Shared Data Architecture (全局数据模型与多租户隔离原则)
 
 <!-- harness:placeholder
-Purpose:
-Explain how important data moves through the system.
+用途:
+定义系统核心数据实体在跨端场景下的归属关系、多租户隔离底线与数据字典管理机制。
 
-Include when applicable:
-- user input
-- frontend state
-- API requests
-- application or domain processing
-- persistence
-- external integrations
-- response and rendering flow
+包含内容:
+- 核心业务实体的权威归属
+- 多租户与工作空间数据隔离底线
+- 数据库表结构快照与数据字典治理
+- 数据软删除与审计字段规范
 
-Example:
+格式示例:
+多租户隔离底线:
+- 数据隔离边界: 核心业务表必须包含 `tenant_id` (或 `workspace_id`) 字段；后端在数据持久层（如 MyBatis-Plus 拦截器）统一自动注入租户过滤条件，严禁任何可能产生越权的数据查询绕过租户校验。
+- 租户上下文不可伪造: 数据操作的作用域由经过服务端验签的当前会话决定，严禁信任客户端请求体中随意上传的租户 ID。
 
-User Interaction
-→ UI
-→ Application / Service Layer
-→ API / Integration
-→ Persistence or External System
-→ Response
-→ UI Update
+数据字典与实体快照:
+- 权威数据字典位于 `docs/generated/data-dictionary.md`，由自动化工具从数据库结构或 DDL 逆向生成，作为只读参考物，严禁手改。
+- 公共审计字段标准: 核心表统一维护 `id`, `tenant_id`, `created_at`, `updated_at`, `created_by`, `deleted` 字段，严格执行逻辑删除与时间戳更新。
 
-Constraints:
-- Focus on major flows rather than individual function calls.
-- Distinguish synchronous and asynchronous flows when architecturally relevant.
-- Do not invent queues, caches, or services that cannot be verified.
+约束:
+- 聚焦全局性、跨领域的数据架构准则，具体的表 DDL 脚本归属 `database/`。
 -->
 
 
-## State Management
+## Architectural Decisions & Evolution (核心架构决策与演进指引)
 
 <!-- harness:placeholder
-Purpose:
-Describe where application state lives and which layer owns each type of state.
+用途:
+记录塑造当前系统的关键架构决策记录 (ADR)，并提供系统面向未来演进的健康边界与触发条件。
 
-Include when applicable:
-- local / component state (e.g. `useState`, `useReducer`, strictly scoped to individual components)
-- shared application state (minimal client-only global state such as theme or session context)
-- server cache state (managed via dedicated cache clients like TanStack Query / SWR, isolated from client stores)
-- form state (managed close to forms to prevent re-renders)
-- URL / router state (search params and route parameters as single source of truth for view/filter states)
-- persisted state
+包含内容:
+- 关键架构决策记录 (采用的架构模式、技术选型动因与权衡取舍)
+- 架构变更的治理流程 (何时必须更新规格与架构文档)
+- 系统的稳定扩展点与演进防腐策略
 
-Clarify:
-- source of truth
-- state categories and their designated mechanisms
-- ownership
-- synchronization rules
-- persistence boundaries
-- separation between server cache data and client application state
+格式示例:
+### 核心架构决策记录 (ADR 摘要)
+1. 决策: 前后端独立工程物理隔离 (Decoupled Monorepo)
+   - 动因: 前端基于 Vite 构建 SPA，后端基于 Maven 管理 Java，工具链独立且便于单独打包部署。
+   - 权衡: 无法在前后端之间直接共享 TypeScript 类型；必须通过明确的 REST/DTO 契约保障跨端一致性。
+2. 决策: 后端业务能力按领域纵向分包 (Capability-based Packaging)
+   - 动因: 摒弃全仓大一统的 `controller/service/dao` 模式，将同一业务领域的高内聚代码聚合在同一个根包下，方便后续平滑拆分服务。
 
-Constraints:
-- Do not describe state-management libraries that are not present.
-- Detailed frontend state conventions belong in `docs/FRONTEND.md`.
-- Keep this section at the architectural level.
--->
+架构演进与治理门禁:
+- 任何破坏现有单向依赖流向、新增顶层资产目录或引入新外部中间件的改动，必须先更新本文档。
+- 可观察的外部行为、API 格式或数据模型发生变更时，必须通过 `openspec/changes/` 发起变更提案并审核。
+- 内部技术重构不得擅自推翻本文件确立的单向依赖流向。
 
-
-## Interfaces and Integrations
-
-<!-- harness:placeholder
-Purpose:
-Describe important architectural boundaries between this system and external systems.
-
-Include when applicable:
-- HTTP APIs
-- SDKs
-- databases
-- authentication providers
-- message queues
-- webhooks
-- third-party services
-- file or object storage
-
-For each significant integration, capture:
-- purpose
-- communication direction
-- ownership boundary
-- failure considerations when architecturally relevant
-
-Constraints:
-- Do not expose secret values.
-- Do not duplicate full API specifications.
-- Detailed API behavior belongs in specifications or reference documentation.
--->
-
-
-## Runtime and Deployment
-
-<!-- harness:placeholder
-Purpose:
-Describe the architecture as it exists at runtime.
-
-Include only when verified:
-- browser / server / worker boundaries
-- build artifacts
-- deployment targets
-- containers
-- edge / serverless runtime environments
-- static hosting
-- environment-specific topology
-
-Constraints:
-- Document only deployment facts that can be verified from the repository.
-- Do not infer production infrastructure from local development configuration.
-- Detailed operational procedures belong in reliability or deployment documentation.
--->
-
-
-## Cross-Cutting Concerns
-
-<!-- harness:placeholder
-Purpose:
-Identify architectural concerns that affect multiple parts of the system.
-
-Include only architecturally significant concerns such as:
-- authentication and authorization
-- error handling
-- logging / observability
-- configuration
-- internationalization
-- caching
-- accessibility
-- feature flags
-
-Route detailed rules to the appropriate domain document.
-
-Example:
-- Backend security & reliability requirements → `docs/BACKEND.md`
-- Frontend conventions & UI/UX design rules → `docs/FRONTEND.md`
-
-Constraints:
-- Keep this section architectural.
-- Do not duplicate full domain policies.
--->
-
-
-## Architectural Invariants
-
-<!-- harness:placeholder
-Purpose:
-Capture architecture-specific rules that must remain true as the system evolves.
-
-Good examples:
-- Feature modules must remain decoupled and must not import from each other (`no cross-feature imports`).
-- Code dependencies must flow one-way from shared code to features to the application shell.
-- Server data must be managed via dedicated cache clients, not duplicated in client-side global stores.
-- Domain logic must remain independent from presentation components.
-- Generated artifacts must not be manually edited.
-- External integrations must be accessed through defined adapters.
-- Shared modules must not import feature-specific code.
-
-Prefer invariants that are:
-- durable
-- observable
-- enforceable
-- mechanically testable where possible
-
-Constraints:
-- Do not repeat generic repository-wide invariants from `AGENTS.md` unless they have architectural meaning here.
-- Avoid temporary implementation preferences.
--->
-
-
-## Architectural Decisions
-
-<!-- harness:placeholder
-Purpose:
-Record important architecture decisions that affect future implementation choices.
-
-For each significant decision, capture:
-- decision
-- rationale
-- major trade-offs
-- consequences
-
-Example:
-
-### Use a feature-oriented module structure
-
-Decision:
-Organize feature-specific application code around stable product or domain boundaries.
-
-Rationale:
-Keep related behavior together and reduce coupling between unrelated features.
-
-Consequences:
-Shared code should move into common infrastructure only when it is genuinely reusable across multiple features.
-
-Constraints:
-- Record durable architectural decisions, not every implementation choice.
-- Detailed historical decisions may live in ADRs if the repository adopts them.
--->
-
-
-## Known Constraints
-
-<!-- harness:placeholder
-Purpose:
-Document constraints that materially limit architecture or implementation choices.
-
-Examples:
-- browser / runtime compatibility
-- legacy API dependencies
-- deployment restrictions
-- data residency requirements
-- third-party platform limitations
-- performance constraints
-- migration constraints
-
-Constraints:
-- Include verified constraints only.
-- Distinguish current constraints from future goals.
--->
-
-
-## Evolution Guidance
-
-<!-- harness:placeholder
-Purpose:
-Describe how the architecture should evolve without prescribing every future implementation.
-
-Include:
-- stable extension points
-- areas expected to change
-- areas that should remain isolated
-- migration expectations
-- when architecture documentation must be updated
-- when a change must enter the OpenSpec change workflow
-
-Example:
-- New behavioral changes should be managed through `openspec/changes/`.
-- Changes that introduce or modify architectural boundaries should update this document.
-- Domain-specific implementation details should remain outside this top-level architecture map.
-
-Constraints:
-- Do not speculate about unsupported future architecture.
-- Keep evolution guidance aligned with the current repository structure and governance model.
+约束:
+- 仅记录真正具有深远影响的架构决策，避免记录鸡毛蒜皮的局部编码技巧。
+- 保持演进指引客观、可执行，严禁编造未经论证的未来宏图。
 -->

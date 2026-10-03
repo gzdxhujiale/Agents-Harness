@@ -6,6 +6,7 @@ export type Severity = "error" | "warning";
 export interface SectionSchema {
   id: string;
   title: string;
+  aliases?: string[];
   level?: number;
   required?: boolean;
   non_empty?: boolean;
@@ -18,7 +19,9 @@ export interface RequiredNestedSectionRule { title: string; level?: number; non_
 export interface ConditionalSubsectionRule {
   when_any: Capability[];
   parent: string;
+  parent_aliases?: string[];
   title: string;
+  title_aliases?: string[];
   level?: number;
   required_subsections?: RequiredNestedSectionRule[];
   minimum_verified_path_entries?: number;

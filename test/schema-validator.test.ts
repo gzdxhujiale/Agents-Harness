@@ -15,4 +15,18 @@ describe("schema-driven Markdown validation", () => {
   it("does not treat comments or duplicate headings as completed content", async () => { const root = await mkdtemp(join(tmpdir(), "aiharness-")); try { await writeFile(join(root, "exists.txt"), ""); const issues = await validateModel(parseMarkdown("# Title\n\n## One\n<!-- ordinary note -->\n\n## One\nEvidence\n\n## Two\nEvidence"), schema, root); expect(issues.map((item) => item.code)).toEqual(expect.arrayContaining(["DUPLICATE_SECTION", "SECTION_EMPTY"])); } finally { await rm(root, { recursive: true, force: true }); } });
   it("enforces a schema minimum meaningful-content rule", async () => { const root = await mkdtemp(join(tmpdir(), "aiharness-")); try { await writeFile(join(root, "exists.txt"), ""); const issues = await validateModel(parseMarkdown("# Title\n\n## One\nEvidence\n\n## Two\nEvidence"), { ...schema, rules: { ...schema.rules, minimum_meaningful_content: 100 } }, root); expect(issues.map((item) => item.code)).toContain("DOCUMENT_CONTENT_TOO_SHORT"); } finally { await rm(root, { recursive: true, force: true }); } });
   it("loads and resolves YAML schemas", async () => { const root = await mkdtemp(join(tmpdir(), "aiharness-")); try { await mkdir(join(root, "schemas")); await writeFile(join(root, "schemas", "x.yaml"), "id: x\npath: docs/X.md\nsections: []\n"); const schemas = await loadSchemas(join(root, "schemas")); expect(resolveSchema(schemas, join(root, "docs", "X.md"), root)?.id).toBe("x"); } finally { await rm(root, { recursive: true, force: true }); } });
+  it("matches bilingual and numbered headings seamlessly", async () => {
+    const root = await mkdtemp(join(tmpdir(), "aiharness-"));
+    try {
+      await writeFile(join(root, "exists.txt"), "");
+      const issues = await validateModel(
+        parseMarkdown("# Title\n\n## 1. One (章节一)\nevidence\n\n## 2. Two (章节二)\nevidence"),
+        schema,
+        root
+      );
+      expect(issues.filter((i) => i.severity === "error")).toHaveLength(0);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
 });

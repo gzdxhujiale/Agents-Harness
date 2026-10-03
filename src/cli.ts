@@ -9,7 +9,7 @@ import {
   validateDocument,
 } from "./index.js";
 
-const program = new Command().name("AIharness").description("Repository-level AI development harness").version("1.1.1");
+const program = new Command().name("AIharness").description("Repository-level AI development harness").version("1.2.0");
 
 program
   .command("init [directory]")

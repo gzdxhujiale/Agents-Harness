@@ -12,15 +12,12 @@ import {
 
 const roots: string[] = [];
 const backendSections = [
-  "Backend Overview",
-  "Module Boundaries",
-  "API and Input Handling",
-  "Data and External Dependencies",
-  "Background Processing",
-  "Error Handling and Observability",
-  "Security Boundaries",
-  "Testing",
-  "Backend Invariants",
+  "Baseline & Runtime",
+  "Package & Layering Boundaries",
+  "Configuration & Security Operations",
+  "Persistence & Data Isolation",
+  "Concurrency, Queue & Reliability",
+  "Backend Invariants & Verification",
 ];
 const validBackend = `# Backend Guide\n\n${backendSections
   .map((section) => `## ${section}\n\nVerified backend documentation for ${section}.`)

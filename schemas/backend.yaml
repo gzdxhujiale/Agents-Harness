@@ -2,13 +2,10 @@ id: backend
 path: docs/BACKEND.md
 applicability: { when_any: [server_api, background_jobs, queue, external_dependency], present: required, absent: not_applicable }
 sections:
-  - { id: overview, title: Backend Overview, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: structure, title: Module Boundaries, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: inputs, title: API and Input Handling, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: data, title: Data and External Dependencies, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: processing, title: Background Processing, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: failures, title: Error Handling and Observability, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: security, title: Security Boundaries, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: testing, title: Testing, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: invariants, title: Backend Invariants, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: baseline, title: Baseline & Runtime, aliases: ["Baseline & Runtime (运行时基线与工程管理)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: package-layering, title: Package & Layering Boundaries, aliases: ["Package & Layering Boundaries (包结构垂直分层与边界)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: config-security, title: Configuration & Security Operations, aliases: ["Configuration & Security Operations (配置隔离、安全与数据脱敏)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: persistence-isolation, title: Persistence & Data Isolation, aliases: ["Persistence & Data Isolation (数据持久化与多租户隔离)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: concurrency-reliability, title: Concurrency, Queue & Reliability, aliases: ["Concurrency, Queue & Reliability (并发流控、队列与可靠性)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: invariants-verification, title: Backend Invariants & Verification, aliases: ["Backend Invariants & Verification (后端代码红线与验证准出)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
 rules: { section_order: strict }

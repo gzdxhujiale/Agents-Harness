@@ -6,8 +6,15 @@ import { initializeHarness, getHarnessStatus, validateAllDocuments, validateDocu
 import { detectCapabilities } from "../src/core/applicability/detect.js";
 
 const roots: string[] = [];
-const architectureSections = ["System Overview", "Technology Architecture", "Repository Structure", "Major Components", "Dependency Boundaries", "Data Flow", "State Management", "Interfaces and Integrations", "Runtime and Deployment", "Cross-Cutting Concerns", "Architectural Invariants", "Architectural Decisions", "Known Constraints", "Evolution Guidance"];
-const architectureDocument = (includeBackend: boolean) => `# Architecture\n\n${architectureSections.map((section) => `## ${section}\n\nVerified architecture information for ${section}.${section === "Repository Structure" && includeBackend ? "\n\n### Backend Structure\n\n- \`src/server.ts\` — owns the verified HTTP server entry point and backend runtime boundary.\n\n#### Dependency Boundaries\n\n- HTTP transport may call application interfaces; application code must not depend on transport callbacks." : ""}`).join("\n\n")}`;
+const architectureSections = [
+  "System Topology & Overview",
+  "Repository Boundaries",
+  "Dependency Flow & Architecture Invariants",
+  "Cross-Boundary Contracts",
+  "Shared Data Architecture",
+  "Architectural Decisions & Evolution",
+];
+const architectureDocument = (includeBackend: boolean) => `# Architecture\n\n${architectureSections.map((section) => `## ${section}\n\nVerified architecture information for ${section}.${section === "Repository Boundaries" && includeBackend ? "\n\n### Backend Structure\n\n- \`src/server.ts\` — owns the verified HTTP server entry point and backend runtime boundary.\n\n#### Dependency Boundaries\n\n- HTTP transport may call application interfaces; application code must not depend on transport callbacks." : ""}`).join("\n\n")}`;
 async function project(files: Record<string, string> = {}): Promise<string> { const root = await mkdtemp(join(tmpdir(), "aiharness-applicability-")); roots.push(root); await initializeHarness(root); for (const [path, content] of Object.entries(files)) { const target = join(root, path); await mkdir(join(target, ".."), { recursive: true }); await writeFile(target, content); } return root; }
 afterEach(async () => { await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))); });
 

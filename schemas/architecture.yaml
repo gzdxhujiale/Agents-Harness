@@ -2,26 +2,20 @@ id: architecture
 path: ARCHITECTURE.md
 applicability: required
 sections:
-  - { id: overview, title: System Overview, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: technology, title: Technology Architecture, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: repository, title: Repository Structure, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: components, title: Major Components, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: boundaries, title: Dependency Boundaries, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: flow, title: Data Flow, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: state, title: State Management, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: interfaces, title: Interfaces and Integrations, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: runtime, title: Runtime and Deployment, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: concerns, title: Cross-Cutting Concerns, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: invariants, title: Architectural Invariants, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: decisions, title: Architectural Decisions, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: constraints, title: Known Constraints, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: evolution, title: Evolution Guidance, level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: topology, title: System Topology & Overview, aliases: ["System Topology & Overview (系统全局拓扑与职责边界)", "System Overview"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: boundaries, title: Repository Boundaries, aliases: ["Repository Boundaries (顶层资产与仓库边界)", "Repository Structure"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: flow-invariants, title: Dependency Flow & Architecture Invariants, aliases: ["Dependency Flow & Architecture Invariants (单向依赖流向与架构铁律)", "Dependency Boundaries"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: contracts, title: Cross-Boundary Contracts, aliases: ["Cross-Boundary Contracts (跨端通信契约与协议规范)", "Interfaces and Integrations"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: data-architecture, title: Shared Data Architecture, aliases: ["Shared Data Architecture (全局数据模型与多租户隔离原则)", "Data Flow", "State Management"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: decisions-evolution, title: Architectural Decisions & Evolution, aliases: ["Architectural Decisions & Evolution (核心架构决策与演进指引)", "Architectural Decisions", "Evolution Guidance"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
 rules:
   section_order: strict
   conditional_subsections:
     - when_any: [server_api, background_jobs, queue]
-      parent: Repository Structure
+      parent: Repository Boundaries
+      parent_aliases: ["Repository Boundaries (顶层资产与仓库边界)", "Repository Structure"]
       title: Backend Structure
+      title_aliases: ["Backend Structure", "后端目录结构"]
       level: 3
       minimum_verified_path_entries: 1
       path_entries_require_responsibility: true

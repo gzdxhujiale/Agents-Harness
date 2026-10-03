@@ -10,18 +10,9 @@ import { loadBundledSchemas } from "./schema/loader.js";
 const templateRoot = resolve(fileURLToPath(new URL("../../templates/default", import.meta.url)));
 const bundledSkillRoot = resolve(fileURLToPath(new URL("../../.agents/skills", import.meta.url)));
 const directoryTemplates = [
-  ".agents/skills/bootstrap-docs/SKILL.md",
-  ".agents/skills/write-agents/SKILL.md",
-  ".agents/skills/write-architecture/SKILL.md",
-  ".agents/skills/write-design/SKILL.md",
-  ".agents/skills/write-security/SKILL.md",
-  ".agents/skills/write-reliability/SKILL.md",
-  ".agents/skills/write-frontend/SKILL.md",
-  ".agents/skills/write-product-sense/SKILL.md",
-  ".agents/skills/assess-quality/SKILL.md",
-  ".agents/skills/write-backend/SKILL.md",
+  ".agents/skills/manage-docs/SKILL.md",
 ];
-const alwaysInstalledSkills = directoryTemplates.filter((path) => path !== ".agents/skills/write-backend/SKILL.md");
+const alwaysInstalledSkills = directoryTemplates;
 
 async function templateFor(path: string): Promise<string> {
   if (path.startsWith(".agents/skills/")) return readFile(join(bundledSkillRoot, path.slice(".agents/skills/".length)), "utf8");

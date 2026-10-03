@@ -2,22 +2,11 @@ id: frontend
 path: docs/FRONTEND.md
 applicability: { when_any: [frontend], present: required, absent: not_applicable }
 sections:
-  - { id: overview, title: Frontend Overview, level: 2, required: true, non_empty: true }
-  - { id: source, title: Source Structure, level: 2, required: true, non_empty: true }
-  - { id: components, title: Component Design, level: 2, required: true, non_empty: true }
-  - { id: design-system, title: Design System Usage, level: 2, required: true, non_empty: true }
-  - { id: styling, title: Styling, level: 2, required: true, non_empty: true }
-  - { id: state, title: State Management, level: 2, required: true, non_empty: true }
-  - { id: data, title: Data Fetching, level: 2, required: true, non_empty: true }
-  - { id: routing, title: Routing and Navigation, level: 2, required: true, non_empty: true }
-  - { id: forms, title: Forms and Validation, level: 2, required: true, non_empty: true }
-  - { id: states, title: Loading, Empty, and Error States, level: 2, required: true, non_empty: true }
-  - { id: effects, title: Effects and Side Effects, level: 2, required: true, non_empty: true }
-  - { id: hooks, title: Hooks and Reusable Logic, level: 2, required: true, non_empty: true }
-  - { id: typescript, title: TypeScript, level: 2, required: true, non_empty: true }
-  - { id: performance, title: Performance, level: 2, required: true, non_empty: true }
-  - { id: accessibility, title: Accessibility Implementation, level: 2, required: true, non_empty: true }
-  - { id: testing, title: Testing, level: 2, required: true, non_empty: true }
-  - { id: invariants, title: Frontend Invariants, level: 2, required: true, non_empty: true }
-  - { id: review, title: Frontend Review Criteria, level: 2, required: true, non_empty: true }
+  - { id: baseline, title: Baseline & Tech Stack, aliases: ["Baseline & Tech Stack (技术栈基线与严格模式)"], level: 2, required: true, non_empty: true }
+  - { id: source, title: Source Structure & Ownership, aliases: ["Source Structure & Ownership (源码分层与所有权边界)"], level: 2, required: true, non_empty: true }
+  - { id: ui-styling, title: UI System & Styling Ownership, aliases: ["UI System & Styling Ownership (组件库与样式所有权分工)"], level: 2, required: true, non_empty: true }
+  - { id: state-data, title: State Classification & Data Fetching, aliases: ["State Classification & Data Fetching (5类状态划分与远端缓存)"], level: 2, required: true, non_empty: true }
+  - { id: routing-lifecycle, title: Routing & Data Lifecycle, aliases: ["Routing & Data Lifecycle (路由架构与数据生命周期)"], level: 2, required: true, non_empty: true }
+  - { id: interactive-feedback, title: Interactive States & Feedback, aliases: ["Interactive States & Feedback (异步状态与统一交互反馈)"], level: 2, required: true, non_empty: true }
+  - { id: invariants-verification, title: Frontend Invariants & Verification, aliases: ["Frontend Invariants & Verification (前端代码红线与验证准出)"], level: 2, required: true, non_empty: true }
 rules: { section_order: strict, placeholder_forbidden: true }
