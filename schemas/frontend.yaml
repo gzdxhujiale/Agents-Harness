@@ -8,5 +8,5 @@ sections:
   - { id: state-data, title: State Classification & Data Fetching, aliases: ["State Classification & Data Fetching (5类状态划分与远端缓存)"], level: 2, required: true, non_empty: true }
   - { id: routing-lifecycle, title: Routing & Data Lifecycle, aliases: ["Routing & Data Lifecycle (路由架构与数据生命周期)"], level: 2, required: true, non_empty: true }
   - { id: interactive-feedback, title: Interactive States & Feedback, aliases: ["Interactive States & Feedback (异步状态与统一交互反馈)"], level: 2, required: true, non_empty: true }
-  - { id: invariants-verification, title: Frontend Invariants & Verification, aliases: ["Frontend Invariants & Verification (前端代码红线与验证准出)"], level: 2, required: true, non_empty: true }
+  - { id: invariants-verification, title: Frontend Invariants & Verification, aliases: ["Frontend Invariants & Verification (前端代码红线与验证准出)", "Frontend Invariants & Verification (前端架构不变量与验证准出)"], level: 2, required: true, non_empty: true }
 rules: { section_order: strict, placeholder_forbidden: true }

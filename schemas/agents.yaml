@@ -3,7 +3,7 @@ path: AGENTS.md
 applicability: required
 sections:
   - { id: project, title: Project, aliases: ["Project (项目概述与技术基线)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: redlines, title: Operating Redlines, aliases: ["Operating Redlines (操作红线与工程铁律)", "Engineering Invariants", "Engineering Invariants (工程不变量与硬性铁律)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: redlines, title: Operating Redlines, aliases: ["Operating Redlines (操作红线与工程铁律)", "Operating Invariants (工程不变量与操作准则)", "Engineering Invariants", "Engineering Invariants (工程不变量与硬性铁律)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: task-routing, title: Task Routing, aliases: ["Task Routing (任务路由与事实来源)", "Task Routing (任务路由)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: commands, title: Commands, aliases: ["Commands (高频指令集)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: completion, title: Completion Criteria, aliases: ["Completion Criteria (任务准出与交付标准)", "Completion Criteria (任务准出底线)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }

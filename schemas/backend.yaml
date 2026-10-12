@@ -7,5 +7,5 @@ sections:
   - { id: config-security, title: Configuration & Security Operations, aliases: ["Configuration & Security Operations (配置隔离、安全与数据脱敏)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: persistence-isolation, title: Persistence & Data Isolation, aliases: ["Persistence & Data Isolation (数据持久化与多租户隔离)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
   - { id: concurrency-reliability, title: Concurrency, Queue & Reliability, aliases: ["Concurrency, Queue & Reliability (并发流控、队列与可靠性)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
-  - { id: invariants-verification, title: Backend Invariants & Verification, aliases: ["Backend Invariants & Verification (后端代码红线与验证准出)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
+  - { id: invariants-verification, title: Backend Invariants & Verification, aliases: ["Backend Invariants & Verification (后端代码红线与验证准出)", "Backend Invariants & Verification (后端架构不变量与验证准出)"], level: 2, required: true, non_empty: true, placeholder_forbidden: true }
 rules: { section_order: strict }
