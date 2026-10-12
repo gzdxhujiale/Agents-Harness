@@ -1,5 +1,11 @@
 # @hujiale2609/ai-harness
 
+## 1.2.2
+
+### Patch Changes
+
+- bcfec58: fix: read CLI version dynamically from package.json instead of hardcoded string
+
 ## 1.2.1
 
 ### Patch Changes
