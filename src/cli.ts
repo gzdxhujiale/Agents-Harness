@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from "node:fs";
 import { Command } from "commander";
 import {
   getHarnessStatus,
@@ -9,7 +10,14 @@ import {
   validateDocument,
 } from "./index.js";
 
-const program = new Command().name("AIharness").description("Repository-level AI development harness").version("1.2.0");
+const packageJson = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8")
+);
+
+const program = new Command()
+  .name("AIharness")
+  .description("Repository-level AI development harness")
+  .version(packageJson.version);
 
 program
   .command("init [directory]")
